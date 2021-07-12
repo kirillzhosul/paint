@@ -427,10 +427,13 @@ function __editor_update_hotkeys(){
 	// @description Function that updates hotkeys.
 	
 	// Open hotkey.
-	if keyboard_check(vk_control) and keyboard_check_pressed(ord("O")) return __editor_open_file();
+	if keyboard_check(vk_control) and keyboard_check_pressed(ord("O")) return __editor_project_open();
 	
-	// New file hotkey.
-	if keyboard_check(vk_control) and keyboard_check_pressed(ord("N")) return __editor_open_new();
+	// New hotkey.
+	if keyboard_check(vk_control) and keyboard_check_pressed(ord("N")) return  __editor_project_new();
+	
+	// Save hotkey.
+	if keyboard_check(vk_control) and keyboard_check_pressed(ord("S")) return  __editor_project_save()
 }
 
 function __editor_update_draw(){
@@ -523,11 +526,14 @@ function __editor_update_move(){
 
 #endregion
 
-#region Open.
+#region Projects.
 
-function __editor_open_new(){
-	// @function __editor_open_new()
-	// @description Function that opens new file.
+function __editor_project_new(){
+	// @function __editor_project_new()
+	// @description Function that opens new project.
+	
+	// Undefined project filename.
+	__editor_project_filename = undefined;
 	
 	// Free layers.
 	__editor_layers_free();
@@ -540,15 +546,21 @@ function __editor_open_new(){
 	__editor_selected_layer = __editor_layer_new("Base");
 
 	// Clearing base layer with white color 
-	__editor_layer_clear(__editor_selected_layer, c_white)
+	__editor_layer_clear(__editor_selected_layer, c_white);
+	
+	// Updating title.
+	__editor_project_update_window_title();
 }
 
-function __editor_open_file(){
-	// @function __editor_open_file()
-	// @description Function that opens file.
+function __editor_project_open(){
+	// @function __editor_project_open()
+	// @description Function that opens project from file.
 	
 	// Getting selected filename.
 	var _selected_filename = get_open_filename("Images (PNG)|*.png", "");
+	
+	// Project filename.
+	__editor_project_filename = _selected_filename;
 	
 	// Clearing layers.
 	__editor_layers_free();
@@ -577,6 +589,74 @@ function __editor_open_file(){
 	
 	// Deleting sprite.
 	sprite_delete(_loaded_sprite);
+	
+	// Updating title.
+	__editor_project_update_window_title();
+}
+
+function __editor_project_update_window_title(){
+	// @function __editor_project_update_window_title()
+	// @description Function that updates window title.
+	
+	if is_undefined(__editor_project_filename){
+		// If not set project filename.
+		
+		// Caption.
+		window_set_caption("Paint Editor (No Project)");
+	}else{
+		// If set.
+		
+		// Caption.
+		window_set_caption("Paint Editor (Project " + __editor_project_filename + ")");
+	}
+}
+
+function __editor_project_save(){
+	// @function __editor_project_save()
+	// @description Function that saves project.
+	
+	if is_undefined(__editor_project_filename){
+		// If undefined project filename.
+		
+		// Getting filename.
+		__editor_project_filename = get_save_filename("Images (PNG)|*.png", "")
+		
+		// Update.
+		__editor_project_update_window_title();
+	}
+	
+	// New surface.
+	var _result_surface = surface_create(__editor_width, __editor_heigth);
+	
+	// Setting surface.
+	surface_set_target(_result_surface);
+	
+	for (var _current_layer_index = array_length(__editor_layers) - 1; _current_layer_index >= 0; _current_layer_index--){
+		// Iterating over all layers.
+	
+		// Getting layer.
+		var _layer = __editor_layer_get(_current_layer_index);
+		
+		if not surface_exists(_layer.layer_surface){
+			// If surface is not exists.
+			
+			// Loading surface.
+			_layer.layer_surface = surface_create(controller.__editor_width, controller.__editor_heigth);
+			_layer.layer_surface = buffer_get_surface(self.layer_buffer, self.layer_surface, 0);
+		}
+		
+		// Drawing.
+		draw_surface(_layer.layer_surface, 0, 0);
+	}
+	
+	// Resetting surface target.
+	surface_reset_target();
+	
+	// Saving.
+	surface_save(_result_surface, __editor_project_filename);
+	
+	// Free memory.
+	surface_free(_result_surface);
 }
 
 #endregion
@@ -595,6 +675,9 @@ __editor_layers = [];
 // Current selected layer.
 __editor_selected_layer = 0;
 
+// Edtir project filename.
+__editor_project_filename = undefined;
+
 // Current selected tool.
 __editor_selected_tool = __editor_tool.PENCIL;
 
@@ -611,6 +694,9 @@ __editor_view_x = __editor_width / 2;
 __editor_view_y = __editor_heigth / 2;
 
 // Opening new file.
-__editor_open_new();
+__editor_project_new();
+
+// Updating title.
+__editor_project_update_window_title();
 
 #endregion
