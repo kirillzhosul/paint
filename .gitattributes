@@ -1,1 +1,4 @@
-*.Yacc linguist-detectable=false
+# Auto detect text files and perform LF normalization
+* text=auto
+* linguist-vendored
+*.gml linguist-vendored=false
