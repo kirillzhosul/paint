@@ -625,19 +625,9 @@ function __editor_project_save(){
 	if is_undefined(__editor_project_filename){
 		// If undefined project filename.
 		
-		// Getting selected filename.
-		var _selected_filename = get_open_filename("Images (PNG)|*.png", "");
-
-		if not file_exists(_selected_filename){
-			// If file we selected is not existing.
+		// Getting filename.
+		__editor_project_filename = get_save_filename("Images (PNG)|*.png", "")
 		
-			// Returning from opening.
-			return;
-		}
-		
-		// Setting filename.
-		__editor_project_filename = _selected_filename;
-	
 		// Update.
 		__editor_project_update_window_title();
 	}
