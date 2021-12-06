@@ -462,20 +462,27 @@ function editor_update_draw(){
 	// @function editor_update_draw()
 	// @description Function that updates editor draw.
 	
-	if mouse_check_button_pressed(mb_left){
-		// If start drawing.
-		
-		// Clear queue.
-		ds_list_clear(editor_mouse_queue_x);
-		ds_list_clear(editor_mouse_queue_y);
-		window_mouse_queue_clear();
-	}
-	
 	if mouse_check_button(mb_left){
 		// If pressed.
 		
+		// Check.
+		var is_click = mouse_check_button_pressed(mb_left);
+		
+		if is_click{
+			// If start drawing.
+		
+			// Clear queue.
+			ds_list_clear(editor_mouse_queue_x);
+			ds_list_clear(editor_mouse_queue_y);
+			window_mouse_queue_clear();
+			
+			// Add click point.
+			ds_list_add(editor_mouse_queue_x, mouse_x, mouse_x);
+			ds_list_add(editor_mouse_queue_y, mouse_y, mouse_y);
+		}
+	
 		// Update queue.
-		var queue_points_count = window_mouse_queue_get(editor_mouse_queue_x, editor_mouse_queue_y);
+		var queue_points_count = window_mouse_queue_get(editor_mouse_queue_x, editor_mouse_queue_y) + is_click * 2;
 
 		if queue_points_count != 0{
 			// If we have something to draw.
@@ -485,8 +492,7 @@ function editor_update_draw(){
 			
 			// Start draw.
 			surface_set_target(current_layer.surface);
-			draw_primitive_begin(pr_linestrip);
-			
+
 			// Tools.
 			switch(editor_selected_tool){
 				case eEDITOR_TOOL.ERASER:
@@ -525,18 +531,17 @@ function editor_update_draw(){
 			for (var queue_point_index = queue_points_count - 1; queue_point_index >= 0; queue_point_index --){
 				// For all queue points.
 				
+				// Skip if we gonna break.
+				if queue_point_index - 1 < 0 continue;
+				
 				// Getting layer draw positions.
 				var draw_x = editor_mouse_queue_x[| queue_point_index] - editor_view_x;
 				var draw_y = editor_mouse_queue_y[| queue_point_index] - editor_view_y;
 							
-				// Skip if we gonna break.
-				if queue_point_index - 1 < 0 continue;
-				
 				// Get previous.
 				var draw_x_previous = editor_mouse_queue_x[| queue_point_index - 1] - editor_view_x;
 				var draw_y_previous = editor_mouse_queue_y[| queue_point_index - 1] - editor_view_y;
 							
-
 				switch(editor_selected_tool){
 					// Selecting tool.
 				
@@ -557,7 +562,6 @@ function editor_update_draw(){
 			}
 
 			// End draw.
-			draw_primitive_end();
 			surface_reset_target();
 			
 			// GPU Blendbmode.
