@@ -44,6 +44,21 @@ function editor_layer(name) constructor{
 		draw_surface_ext(self.surface, controller.editor_view_x, controller.editor_view_y, controller.editor_zoom, controller.editor_zoom, 0, c_white, 1);
 	}
 	
+	self.reset = function (surface){
+		// @function editor_layer.reset()
+		// @description Function that reset.
+		
+		// Destroy old data.
+		self.free();
+		
+		// Set surface.
+		self.surface = surface;
+		
+		// Create and set buffer.
+		self.buffer = buffer_create(1, buffer_grow, 1);
+		buffer_set_surface(self.buffer, self.surface, 0);
+	}
+	
 	self.free = function(){
 		// @function editor_layer.free()
 		// @description Function that frees layer.
@@ -51,6 +66,24 @@ function editor_layer(name) constructor{
 		// Free layer.
 		surface_free(self.surface);
 		buffer_delete(self.buffer);
+	}
+}
+
+function editor_stack_command(layer_index, layer_surface) constructor{
+	// Stack command struct.
+	
+	// Layer index.
+	self.layer_index = layer_index;
+	
+	// Layer surface.
+	self.layer_surface = layer_surface;
+	
+	self.free = function (){
+		// @function editor_stack_command.free()
+		// @description Frees stack command.
+		
+		// Free surface.
+		surface_free(self.layer_surface);
 	}
 }
 
@@ -425,6 +458,43 @@ function draw_button_text(x, y, text){
 
 #endregion
 
+#region Command.
+
+function editor_command_stack_clear(){
+	// @function editor_command_stack_clear()
+	// @description Clears command stack.
+	
+	for (var command_index = 0; command_index < array_length(editor_command_stack); command_index++){
+		// For every command.
+		
+		// Free.
+		editor_command_stack[command_index].free();
+		editor_command_stack[command_index] = undefined;
+	}
+}
+
+function editor_command_undo(){
+	// @function editor_command_undo()
+	// @description Undo command.
+	
+	// Return if no commands.
+	if array_length(editor_command_stack) == 0 return;
+	
+	// WIP FIX.
+	if mouse_check_button(mb_left) return;
+	
+	// Get command.
+	var command = array_pop(editor_command_stack);
+	
+	// Get layer.
+	var current_layer = editor_layers[command.layer_index];
+	
+	// Reset layer.
+	current_layer.reset(command.layer_surface);
+}
+
+#endregion
+
 #region Updating.
 
 function editor_update(){
@@ -445,6 +515,9 @@ function editor_update_hotkeys(){
 	// @function editor_update_hotkeys()
 	// @description Function that updates hotkeys.
 	
+	// Undo command.
+	if keyboard_check(vk_control) and keyboard_check_pressed(ord("Z")) return editor_command_undo();
+	
 	// Open hotkey.
 	if keyboard_check(vk_control) and keyboard_check_pressed(ord("O")) return editor_project_open();
 	
@@ -459,28 +532,45 @@ function editor_update_draw(){
 	// @function editor_update_draw()
 	// @description Function that updates editor draw.
 	
+	if mouse_check_button_pressed(mb_left){
+		// If click.
+		
+		// Getting layer.
+		var current_layer = editor_layer_get(editor_selected_layer);
+		
+		// Create command surface.
+		var command_surface = surface_create(controller.editor_width, controller.editor_heigth);
+		surface_copy(command_surface, 0, 0, current_layer.surface);
+		
+		// Remember command.
+		editor_command_stack_temporary = new editor_stack_command(editor_selected_layer, command_surface);
+		
+		// Clear queue.
+		ds_list_clear(editor_mouse_queue_x);
+		ds_list_clear(editor_mouse_queue_y);
+		window_mouse_queue_clear();
+			
+		// Add click point.
+		ds_list_add(editor_mouse_queue_x, mouse_x, mouse_x);
+		ds_list_add(editor_mouse_queue_y, mouse_y, mouse_y);
+		
+	}
+	
+	if mouse_check_button_released(mb_left){
+		// If released.
+		
+		// Push command.
+		array_push(editor_command_stack, editor_command_stack_temporary);
+		editor_command_stack_temporary = undefined;
+	}
+	
 	if mouse_check_button(mb_left){
 		// If pressed.
 		
-		// Check.
-		var is_click = mouse_check_button_pressed(mb_left);
-		
-		if is_click{
-			// If start drawing.
-		
-			// Clear queue.
-			ds_list_clear(editor_mouse_queue_x);
-			ds_list_clear(editor_mouse_queue_y);
-			window_mouse_queue_clear();
-			
-			// Add click point.
-			ds_list_add(editor_mouse_queue_x, mouse_x, mouse_x);
-			ds_list_add(editor_mouse_queue_y, mouse_y, mouse_y);
-		}
-	
 		// Update queue.
-		var queue_points_count = window_mouse_queue_get(editor_mouse_queue_x, editor_mouse_queue_y) + is_click * 2;
-
+		var queue_points_count = window_mouse_queue_get(editor_mouse_queue_x, editor_mouse_queue_y);
+		if (mouse_check_button_pressed(mb_left)) queue_points_count += 2;
+		
 		if queue_points_count != 0{
 			// If we have something to draw.
 			
@@ -633,10 +723,13 @@ function editor_project_new(){
 	editor_heigth = floor(room_height / 2);
 	
 	// Creating default layer and selecting it.
-	editor_selected_layer = editor_layer_new("Base");
+	editor_layer_select(editor_layer_new("Base"));
 
 	// Clearing base layer with white color 
 	editor_layer_clear(editor_selected_layer, c_white);
+	
+	// Clear command stack.
+	editor_command_stack_clear();
 	
 	// Updating title.
 	editor_project_update_window_title();
@@ -675,6 +768,8 @@ function editor_project_open(){
 	// Selecting layer.
 	editor_layer_select(_file_layer);
 	
+	// Clear command stack.
+	editor_command_stack_clear();
 	// Drawing loaded image.
 	surface_set_target(editor_layer_get(_file_layer).surface);
 	
@@ -772,6 +867,10 @@ editor_heigth = floor(room_height / 2);
 
 // Editor layers surfaces.
 editor_layers = [];
+
+// Command stack for undo.
+editor_command_stack = [];
+editor_command_stack_temporary = undefined;
 
 // Current selected layer.
 editor_selected_layer = 0;
