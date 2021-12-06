@@ -241,7 +241,9 @@ function editor_draw(){
 	editor_draw_layers();
 	
 	// Drawing interface.
-	editor_draw_interface();
+	editor_draw_interface(0, 0);
+	
+
 }
 
 function editor_draw_layers(){
@@ -460,61 +462,83 @@ function editor_update_draw(){
 	// @function editor_update_draw()
 	// @description Function that updates editor draw.
 	
+	if mouse_check_button_pressed(mb_left){
+		// If start drawing.
+		
+		// Clear queue.
+		ds_list_clear(editor_mouse_queue_x);
+		ds_list_clear(editor_mouse_queue_y);
+		window_mouse_queue_clear();
+	}
+	
 	if mouse_check_button(mb_left){
 		// If pressed.
 		
-		// Getting layer draw positions.
-		var draw_x = mouse_x - editor_view_x;
-		var draw_y = mouse_y - editor_view_y;
+		// Update queue.
+		var queue_points_count = window_mouse_queue_get(editor_mouse_queue_x, editor_mouse_queue_y);
 		
-		// Previous draw positions.
-		var draw_x_previous = editor_previous_mouse_x - editor_view_x;
-		var draw_y_previous = editor_previous_mouse_y - editor_view_y;
-		
-		if (draw_x > 0 and draw_x < editor_width) and (draw_y > 0 and draw_y < editor_heigth){
-			// If valid.
-			
-			// Getting layer.
-			var current_layer = editor_layer_get(editor_selected_layer);
-			
-			// Setting surface.
-			surface_set_target(current_layer.surface);
-		
-			switch(editor_selected_tool){
-				// Selecting tool.
-				
-				case eEDITOR_TOOL.ERASER:
-					// If eraser.
-					
-					// GPU Blendbmode.
-					gpu_set_blendmode(bm_subtract);
-					
-					// Drawing.
-					draw_line_width(draw_x_previous, draw_y_previous, draw_x, draw_y, 5);
+		if queue_points_count != 0{
+			// If we have something to draw.
 
-					// GPU Blendbmode.
-					gpu_set_blendmode(bm_normal);
-					
-				break;
-				case eEDITOR_TOOL.PENCIL:
-					// If pencil.
-					
-					// Drawing color.
-					draw_set_color(c_green);
-	
-					// Drawing.
-					draw_line_width(draw_x_previous, draw_y_previous, draw_x, draw_y, 5);
-				break;
-			}
+			for (var queue_point_index = queue_points_count - 1; queue_point_index >= 0; queue_point_index --){
+				// For all queue points.
+				
+				if queue_point_index - 1 == -1 continue;
+				
+				// Getting layer draw positions.
+				var draw_x = editor_mouse_queue_x[| queue_point_index] - editor_view_x;
+				var draw_y = editor_mouse_queue_y[| queue_point_index] - editor_view_y;
+		
+				// Previous draw positions.
+				var draw_x_previous = editor_mouse_queue_x[| queue_point_index - 1] - editor_view_x;
+				var draw_y_previous = editor_mouse_queue_y[| queue_point_index - 1] - editor_view_y;
+		
+				if (draw_x > 0 and draw_x < editor_width) and (draw_y > 0 and draw_y < editor_heigth){
+					// If valid.
 			
-			// Resetting surface.
-			surface_reset_target();
+					// Getting layer.
+					var current_layer = editor_layer_get(editor_selected_layer);
+			
+					// Setting surface.
+					surface_set_target(current_layer.surface);
+		
+					switch(editor_selected_tool){
+						// Selecting tool.
+				
+						case eEDITOR_TOOL.ERASER:
+							// If eraser.
+					
+							// GPU Blendbmode.
+							gpu_set_blendmode(bm_subtract);
+					
+							// Drawing.
+							draw_line_width(draw_x_previous, draw_y_previous, draw_x, draw_y, 5);
+
+							// GPU Blendbmode.
+							gpu_set_blendmode(bm_normal);
+						break;
+						case eEDITOR_TOOL.PENCIL:
+							// If pencil.
+					
+							// Drawing color.
+							draw_set_color(c_green);
+	
+							// Drawing.
+							draw_line_width(draw_x_previous, draw_y_previous, draw_x, draw_y, 5);
+						break;
+					}
+			
+					// Resetting surface.
+					surface_reset_target();
+				}
+			}
+		
+			// Clear queue.
+			ds_list_clear(editor_mouse_queue_x);
+			ds_list_clear(editor_mouse_queue_y);
+			window_mouse_queue_clear();
 		}
 	}
-	
-	// Mouse pos previous.
-	editor_previous_mouse_x = mouse_x;
-	editor_previous_mouse_y = mouse_y;
 }
 
 function editor_update_move(){
@@ -692,6 +716,10 @@ function editor_project_save(){
 
 #region Entry point.
 
+// Lists for window_mouse_queque extension.
+editor_mouse_queue_x = ds_list_create()
+editor_mouse_queue_y = ds_list_create();
+	
 // Editor width, height.
 editor_width = floor(room_width / 2);
 editor_heigth = floor(room_height / 2);
@@ -712,10 +740,6 @@ editor_selected_tool = eEDITOR_TOOL.PENCIL;
 editor_move_x = -1;
 editor_move_y = -1;
 
-// Mouse pos previous.
-editor_previous_mouse_x = mouse_x;
-editor_previous_mouse_y = mouse_y;
-
 // Current view positions.
 editor_view_x = editor_width / 2;
 editor_view_y = editor_heigth / 2;
@@ -725,5 +749,7 @@ editor_project_new();
 
 // Updating title.
 editor_project_update_window_title();
+
+window_mouse_queue_init();
 
 #endregion

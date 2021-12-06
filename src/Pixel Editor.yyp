@@ -2,6 +2,7 @@
   "resources": [
     {"id":{"name":"ui_interface_font","path":"fonts/ui_interface_font/ui_interface_font.yy",},"order":0,},
     {"id":{"name":"ui_button_layer_tool_eraser","path":"sprites/ui_button_layer_tool_eraser/ui_button_layer_tool_eraser.yy",},"order":1,},
+    {"id":{"name":"window_mouse_queue","path":"extensions/window_mouse_queue/window_mouse_queue.yy",},"order":0,},
     {"id":{"name":"ui_button_layer_down","path":"sprites/ui_button_layer_down/ui_button_layer_down.yy",},"order":3,},
     {"id":{"name":"ui_button_layer_new","path":"sprites/ui_button_layer_new/ui_button_layer_new.yy",},"order":0,},
     {"id":{"name":"ui_button_layer_delete","path":"sprites/ui_button_layer_delete/ui_button_layer_delete.yy",},"order":1,},
@@ -34,6 +35,7 @@
     {"folderPath":"folders/Fonts.yy","order":3,"resourceVersion":"1.0","name":"Fonts","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/interface/Buttons/Layers.yy","order":0,"resourceVersion":"1.0","name":"Layers","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/interface/Buttons/Tools.yy","order":1,"resourceVersion":"1.0","name":"Tools","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Extensions.yy","order":4,"resourceVersion":"1.0","name":"Extensions","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},
@@ -41,7 +43,10 @@
   "TextureGroups": [
     {"isScaled":true,"autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,"resourceVersion":"1.3","name":"Default","resourceType":"GMTextureGroup",},
   ],
-  "IncludedFiles": [],
+  "IncludedFiles": [
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"window_mouse_queue.html","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"window_mouse_queue.html","resourceType":"GMIncludedFile",},
+  ],
   "MetaData": {
     "IDEVersion": "2.3.7.603",
   },
