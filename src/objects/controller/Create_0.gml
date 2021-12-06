@@ -39,9 +39,9 @@ function editor_layer(name) constructor{
 			// Buffering surface.
 			buffer_set_surface(self.buffer, self.surface, 0);
 		}
-		
+
 		// Drawing.
-		draw_surface(self.surface, controller.editor_view_x, controller.editor_view_y);
+		draw_surface_ext(self.surface, controller.editor_view_x, controller.editor_view_y, controller.editor_zoom, controller.editor_zoom, 0, c_white, 1);
 	}
 	
 	self.free = function(){
@@ -156,7 +156,6 @@ function editor_layer_delete(layer_index){
 	// Do not process if invalid.
 	if is_undefined(editor_selected_layer) return;
 	
-	
 	if editor_selected_layer == layer_index{
 		// If deleting selected layer.
 		
@@ -242,8 +241,6 @@ function editor_draw(){
 	
 	// Drawing interface.
 	editor_draw_interface(0, 0);
-	
-
 }
 
 function editor_draw_layers(){
@@ -535,12 +532,12 @@ function editor_update_draw(){
 				if queue_point_index - 1 < 0 continue;
 				
 				// Getting layer draw positions.
-				var draw_x = editor_mouse_queue_x[| queue_point_index] - editor_view_x;
-				var draw_y = editor_mouse_queue_y[| queue_point_index] - editor_view_y;
+				var draw_x = (editor_mouse_queue_x[| queue_point_index] - editor_view_x) / editor_zoom;
+				var draw_y = (editor_mouse_queue_y[| queue_point_index] - editor_view_y) / editor_zoom;
 							
 				// Get previous.
-				var draw_x_previous = editor_mouse_queue_x[| queue_point_index - 1] - editor_view_x;
-				var draw_y_previous = editor_mouse_queue_y[| queue_point_index - 1] - editor_view_y;
+				var draw_x_previous = (editor_mouse_queue_x[| queue_point_index - 1] - editor_view_x) / editor_zoom;
+				var draw_y_previous = (editor_mouse_queue_y[| queue_point_index - 1] - editor_view_y) / editor_zoom;
 							
 				switch(editor_selected_tool){
 					// Selecting tool.
@@ -598,6 +595,21 @@ function editor_update_move(){
 			// Remember position.
 			editor_move_x = mouse_x;
 			editor_move_y = mouse_y;
+		}
+	}
+	
+	// Zoom step, maximum, minimum.
+	var zoom_step = 0.25;
+	var zoom_min = 0.25;
+	var zoom_max = 5;
+	
+	if mouse_wheel_up(){
+		// Zoom in.
+		editor_zoom = clamp(editor_zoom + zoom_step, zoom_min, zoom_max);
+	}else{
+		if mouse_wheel_down(){
+			// Zoom out.
+			editor_zoom = clamp(editor_zoom - zoom_step, zoom_min, zoom_max);
 		}
 	}
 }
@@ -773,6 +785,9 @@ editor_selected_tool = eEDITOR_TOOL.PENCIL;
 // Move positions.
 editor_move_x = -1;
 editor_move_y = -1;
+
+// Current zoom level.
+editor_zoom = 1;
 
 // Current view positions.
 editor_view_x = editor_width / 2;
