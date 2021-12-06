@@ -124,6 +124,9 @@ function __editor_layer_switch_visibility(_layer_index){
 	// @description Function that switch layer visibility.
 	// @param {real} _layer_index Layer index to switch visibility..
 	
+	// Not processing if invalid layer.
+	if is_undefined(_layer_index) return;
+	
 	// Getting layer.
 	var _layer = __editor_layer_get(_layer_index);
 	
@@ -150,11 +153,22 @@ function __editor_layer_delete(_layer_index){
 	// @function __editor_layer_delete(_layer_index)
 	// @description Function that deletes layer.
 	
-	if __editor_selected_layer == _layer_index and _layer_index != 0{
+	// Do not process if invalid.
+	if is_undefined(__editor_selected_layer) return;
+	
+	
+	if __editor_selected_layer == _layer_index{
 		// If deleting selected layer.
 		
 		// Selecting moved.
 		__editor_selected_layer = _layer_index - 1;
+		
+		if __editor_selected_layer == -1{
+			// If run out of bounds.
+			
+			// Set invalid layer.
+			__editor_selected_layer = undefined;
+		}
 	}
 	
 	// Deleting layer.
@@ -164,6 +178,9 @@ function __editor_layer_delete(_layer_index){
 function __editor_layer_move_up(_layer_index){
 	// @function __editor_layer_move_up(_layer_index)
 	// @description Function that moves layer up.
+	
+	// Not processing if invalid layer.
+	if is_undefined(_layer_index) return;
 	
 	// Returning if first already.
 	if _layer_index == 0 return;
@@ -182,6 +199,9 @@ function __editor_layer_move_up(_layer_index){
 function __editor_layer_move_down(_layer_index){
 	// @function __editor_layer_move_up(_layer_index)
 	// @description Function that moves layer up.
+	
+	// Not processing if invalid layer.
+	if is_undefined(_layer_index) return;
 	
 	// Returning if first already.
 	if _layer_index == array_length(__editor_layers) - 1 return;
