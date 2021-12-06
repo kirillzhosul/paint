@@ -2,4 +2,4 @@
 // @author Kirill Zhosul (@kirillzhosul)
 
 // Drawing editor.
-__editor_draw();
+editor_draw();

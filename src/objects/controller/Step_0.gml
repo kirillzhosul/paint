@@ -2,4 +2,4 @@
 // @author Kirill Zhosul (@kirillzhosul)
 
 // Updating.
-__editor_update();
+editor_update();
