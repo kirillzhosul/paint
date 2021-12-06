@@ -476,63 +476,93 @@ function editor_update_draw(){
 		
 		// Update queue.
 		var queue_points_count = window_mouse_queue_get(editor_mouse_queue_x, editor_mouse_queue_y);
-		
+
 		if queue_points_count != 0{
 			// If we have something to draw.
-
+			
+			// Getting layer.
+			var current_layer = editor_layer_get(editor_selected_layer);
+			
+			// Start draw.
+			surface_set_target(current_layer.surface);
+			draw_primitive_begin(pr_linestrip);
+			
+			// Tools.
+			switch(editor_selected_tool){
+				case eEDITOR_TOOL.ERASER:
+					// GPU Blendbmode.
+					gpu_set_blendmode(bm_subtract);
+				break;
+				case eEDITOR_TOOL.PENCIL:
+					// Drawing color.
+					draw_set_color(c_green);
+				break;
+			}
+							
+			var draw_function = function __draw_function(x1, y1, x2, y2){
+				// @function __draw_function()
+				// @description Function that draws.
+								
+				// Settings.
+				var curve = 0.1;
+				var threeshold = 2;
+				var radius = 8;
+								
+				// Get difference.
+				var difference = abs(x1 - x2) + abs(y1 - y2);
+								
+				if difference >= radius / threeshold{
+					// If difference too much.
+									
+					// Recursion.
+					__draw_function(lerp(x1, x2, curve), lerp(y1, y2, curve), x2, y2);
+				}
+								
+				// Main element.
+				draw_circle(x1, y1, radius, false);
+			};
+			
 			for (var queue_point_index = queue_points_count - 1; queue_point_index >= 0; queue_point_index --){
 				// For all queue points.
-				
-				if queue_point_index - 1 == -1 continue;
 				
 				// Getting layer draw positions.
 				var draw_x = editor_mouse_queue_x[| queue_point_index] - editor_view_x;
 				var draw_y = editor_mouse_queue_y[| queue_point_index] - editor_view_y;
-		
-				// Previous draw positions.
+							
+				// Skip if we gonna break.
+				if queue_point_index - 1 < 0 continue;
+				
+				// Get previous.
 				var draw_x_previous = editor_mouse_queue_x[| queue_point_index - 1] - editor_view_x;
 				var draw_y_previous = editor_mouse_queue_y[| queue_point_index - 1] - editor_view_y;
-		
-				if (draw_x > 0 and draw_x < editor_width) and (draw_y > 0 and draw_y < editor_heigth){
-					// If valid.
-			
-					// Getting layer.
-					var current_layer = editor_layer_get(editor_selected_layer);
-			
-					// Setting surface.
-					surface_set_target(current_layer.surface);
-		
-					switch(editor_selected_tool){
-						// Selecting tool.
-				
-						case eEDITOR_TOOL.ERASER:
-							// If eraser.
-					
-							// GPU Blendbmode.
-							gpu_set_blendmode(bm_subtract);
-					
-							// Drawing.
-							draw_line_width(draw_x_previous, draw_y_previous, draw_x, draw_y, 5);
+							
 
-							// GPU Blendbmode.
-							gpu_set_blendmode(bm_normal);
-						break;
-						case eEDITOR_TOOL.PENCIL:
-							// If pencil.
-					
-							// Drawing color.
-							draw_set_color(c_green);
-	
-							// Drawing.
-							draw_line_width(draw_x_previous, draw_y_previous, draw_x, draw_y, 5);
-						break;
-					}
-			
-					// Resetting surface.
-					surface_reset_target();
+				switch(editor_selected_tool){
+					// Selecting tool.
+				
+					case eEDITOR_TOOL.ERASER:
+						// If eraser.
+
+						// Drawing.
+						draw_function(draw_x_previous, draw_y_previous, draw_x, draw_y);
+					break;
+					case eEDITOR_TOOL.PENCIL:
+						// If pencil.
+
+						// Drawing.
+						draw_function(draw_x_previous, draw_y_previous, draw_x, draw_y);
+					break;
 				}
+
 			}
-		
+
+			// End draw.
+			draw_primitive_end();
+			surface_reset_target();
+			
+			// GPU Blendbmode.
+			gpu_set_blendmode(bm_normal);
+			
 			// Clear queue.
 			ds_list_clear(editor_mouse_queue_x);
 			ds_list_clear(editor_mouse_queue_y);
