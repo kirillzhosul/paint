@@ -332,6 +332,12 @@ function editor_draw_interface(x, y){
 	offset = 3;
 	y = room_height - sprite_get_width(ui_button_layer_tool_pencil) - 3;
 	
+	// Command Stack.
+	
+	// Drawing counter text.
+	var text = "Undo Stack:\n" + string(array_length(editor_command_stack));
+	draw_text(room_width - string_width(text), 0, text);
+	
 	// Tools buttons.
 	
 	// Pencil tool.
@@ -535,15 +541,23 @@ function editor_update_draw(){
 	if mouse_check_button_pressed(mb_left){
 		// If click.
 		
-		// Getting layer.
-		var current_layer = editor_layer_get(editor_selected_layer);
+		// Getting layer draw positions.
+		var draw_x = (mouse_x - editor_view_x) / editor_zoom;
+		var draw_y = (mouse_y - editor_view_y) / editor_zoom;
+							
+		if (draw_x > 0 and draw_x < editor_width) and (draw_y > 0 and draw_y < editor_heigth){
+			// If valid.
+			
+			// Getting layer.
+			var current_layer = editor_layer_get(editor_selected_layer);
 		
-		// Create command surface.
-		var command_surface = surface_create(controller.editor_width, controller.editor_heigth);
-		surface_copy(command_surface, 0, 0, current_layer.surface);
+			// Create command surface.
+			var command_surface = surface_create(controller.editor_width, controller.editor_heigth);
+			surface_copy(command_surface, 0, 0, current_layer.surface);
 		
-		// Remember command.
-		editor_command_stack_temporary = new editor_stack_command(editor_selected_layer, command_surface);
+			// Remember command.
+			editor_command_stack_temporary = new editor_stack_command(editor_selected_layer, command_surface);
+		}
 		
 		// Clear queue.
 		ds_list_clear(editor_mouse_queue_x);
@@ -560,8 +574,10 @@ function editor_update_draw(){
 		// If released.
 		
 		// Push command.
-		array_push(editor_command_stack, editor_command_stack_temporary);
-		editor_command_stack_temporary = undefined;
+		if not is_undefined(editor_command_stack_temporary){
+			array_push(editor_command_stack, editor_command_stack_temporary);
+			editor_command_stack_temporary = undefined;
+		}
 	}
 	
 	if mouse_check_button(mb_left){
