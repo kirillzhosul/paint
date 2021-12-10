@@ -25,8 +25,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Pixel Editor",
-    "path": "Pixel Editor.yyp",
+    "name": "Paint Editor",
+    "path": "Paint Editor.yyp",
   },
   "resourceVersion": "1.0",
   "name": "controller",

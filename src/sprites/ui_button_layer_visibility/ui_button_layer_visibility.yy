@@ -104,8 +104,8 @@
   "gridY": 0,
   "frames": [
     {"compositeImage":{"FrameId":{"name":"280e7854-00cb-4032-b2c1-6696e793902a","path":"sprites/ui_button_layer_visibility/ui_button_layer_visibility.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"280e7854-00cb-4032-b2c1-6696e793902a","path":"sprites/ui_button_layer_visibility/ui_button_layer_visibility.yy",},"LayerId":{"name":"c17f2340-70a6-4ef8-a6ae-221ca217b355","path":"sprites/ui_button_layer_visibility/ui_button_layer_visibility.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
         {"FrameId":{"name":"280e7854-00cb-4032-b2c1-6696e793902a","path":"sprites/ui_button_layer_visibility/ui_button_layer_visibility.yy",},"LayerId":{"name":"5f42e469-508c-42be-a9c8-25b3a818c930","path":"sprites/ui_button_layer_visibility/ui_button_layer_visibility.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+        {"FrameId":{"name":"280e7854-00cb-4032-b2c1-6696e793902a","path":"sprites/ui_button_layer_visibility/ui_button_layer_visibility.yy",},"LayerId":{"name":"c17f2340-70a6-4ef8-a6ae-221ca217b355","path":"sprites/ui_button_layer_visibility/ui_button_layer_visibility.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
       ],"parent":{"name":"ui_button_layer_visibility","path":"sprites/ui_button_layer_visibility/ui_button_layer_visibility.yy",},"resourceVersion":"1.0","name":"280e7854-00cb-4032-b2c1-6696e793902a","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
@@ -122,7 +122,7 @@
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"f70e3a9c-7d56-485a-ad7b-62beddfea8ed","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"280e7854-00cb-4032-b2c1-6696e793902a","path":"sprites/ui_button_layer_visibility/ui_button_layer_visibility.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"modifiers":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack",},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -151,7 +151,7 @@
   "nineSlice": null,
   "parent": {
     "name": "Layers",
-    "path": "folders/interface/Buttons/Layers.yy",
+    "path": "folders/Interface/Buttons/Layers.yy",
   },
   "resourceVersion": "1.0",
   "name": "ui_button_layer_visibility",
