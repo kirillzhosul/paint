@@ -30,11 +30,11 @@
     {"roomId":{"name":"editor","path":"rooms/editor/editor.yy",},},
   ],
   "Folders": [
-    {"folderPath":"folders/interface.yy","order":2,"resourceVersion":"1.0","name":"interface","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/interface/Buttons.yy","order":1,"resourceVersion":"1.0","name":"Buttons","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Interface.yy","order":2,"resourceVersion":"1.0","name":"Interface","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Interface/Buttons.yy","order":1,"resourceVersion":"1.0","name":"Buttons","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Fonts.yy","order":3,"resourceVersion":"1.0","name":"Fonts","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/interface/Buttons/Layers.yy","order":0,"resourceVersion":"1.0","name":"Layers","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/interface/Buttons/Tools.yy","order":1,"resourceVersion":"1.0","name":"Tools","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Interface/Buttons/Layers.yy","order":0,"resourceVersion":"1.0","name":"Layers","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Interface/Buttons/Tools.yy","order":1,"resourceVersion":"1.0","name":"Tools","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Extensions.yy","order":4,"resourceVersion":"1.0","name":"Extensions","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
@@ -51,7 +51,7 @@
     "IDEVersion": "2.3.7.603",
   },
   "resourceVersion": "1.4",
-  "name": "Pixel Editor",
+  "name": "Paint Editor",
   "tags": [],
   "resourceType": "GMProject",
 }
