@@ -61,7 +61,6 @@ function editor_layer(name) constructor{
 		
 		// Create and set buffer.
 		self.buffer = buffer_create(1, buffer_grow, 1);
-		self.create_surface();
 		buffer_get_surface(self.buffer, self.surface, 0);
 	}
 	
