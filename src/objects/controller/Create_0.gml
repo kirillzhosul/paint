@@ -32,7 +32,7 @@ function editor_layer(name) constructor{
 			
 			// Loading surface.
 			self.surface = surface_create(controller.editor_width, controller.editor_heigth);
-			self.surface = buffer_get_surface(self.buffer, self.surface, 0);
+			buffer_get_surface(self.buffer, self.surface, 0);
 		}else{
 			// If all OK.
 			
@@ -850,7 +850,7 @@ function editor_project_save(){
 			
 			// Loading surface.
 			current_layer.surface = surface_create(controller.editor_width, controller.editor_heigth);
-			current_layer.surface = buffer_get_surface(self.buffer, self.surface, 0);
+			buffer_get_surface(current_layer.buffer, current_layer.surface, 0);
 		}
 		
 		// Drawing.
