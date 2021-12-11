@@ -522,6 +522,9 @@ function editor_update_hotkeys(){
 function editor_update_draw(){
 	// @description Uupdates editor draw.
 	
+	// Return if no selected layer.
+	if (is_undefined(editor_selected_layer)) return;
+	
 	if (mouse_check_button_pressed(mb_left)){
 		// If click.
 		
@@ -766,6 +769,7 @@ function editor_project_open(){
 	
 	// Clear command stack.
 	editor_command_stack_clear();
+	
 	// Drawing loaded image.
 	surface_set_target(editor_layer_get(_file_layer).surface);
 	
