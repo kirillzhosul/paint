@@ -597,6 +597,9 @@ function editor_update_draw(){
 		
 		// Mark project as unsaved.
 		editor_project_is_saved = false;
+		
+		// Update title.
+		editor_project_update_window_title();
 	}
 	
 	if (mouse_check_button_released(mb_left)){
@@ -773,6 +776,9 @@ function editor_project_new(){
 	// Clear command stack.
 	editor_command_stack_clear();
 	
+	// Unsave.
+	editor_project_is_saved = false;
+	
 	// Updating title.
 	editor_project_update_window_title();
 }
@@ -824,27 +830,31 @@ function editor_project_open(){
 	// Deleting sprite.
 	sprite_delete(loaded_sprite);
 	
-	// Updating title.
-	editor_project_update_window_title();
-	
 	// Mark as saved.
 	editor_project_is_saved = true;
+	
+	// Updating title.
+	editor_project_update_window_title();
 }
 
 function editor_project_update_window_title(){
 	// @description Updates window title.
 	
-	if (is_undefined(editor_project_filename)){
-		// If not set project filename.
+	// Project name.
+	var project = "(No Project)";
+	
+	// Save title text.
+	var save_state = editor_project_is_saved ? "" : "*UNSAVED* ";
+	
+	if (not is_undefined(editor_project_filename)){
+		// If project opened.
 		
-		// Caption.
-		window_set_caption("Paint Editor (No Project)");
-	}else{
-		// If set.
-		
-		// Caption.
-		window_set_caption("Paint Editor (Project " + editor_project_filename + ")");
+		// Project.
+		project = ("(Project " + editor_project_filename + ")");
 	}
+	
+	// Update title.
+	window_set_caption("Paint Editor " + save_state + project);
 }
 
 function editor_project_save(){
@@ -895,6 +905,9 @@ function editor_project_save(){
 	
 	// Mark project as saved.
 	editor_project_is_saved = true;
+	
+	// Update title.
+	editor_project_update_window_title();
 }
 
 #endregion
