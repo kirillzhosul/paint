@@ -595,6 +595,8 @@ function editor_update_draw(){
 		ds_list_add(editor_mouse_queue_x, mouse_x, mouse_x);
 		ds_list_add(editor_mouse_queue_y, mouse_y, mouse_y);
 		
+		// Mark project as unsaved.
+		editor_project_is_saved = false;
 	}
 	
 	if (mouse_check_button_released(mb_left)){
@@ -802,16 +804,16 @@ function editor_project_open(){
 	editor_heigth = sprite_get_height(loaded_sprite);
 	
 	// New layer.
-	var _file_layer = editor_layer_new("File");
+	var file_layer = editor_layer_new("File");
 	
 	// Selecting layer.
-	editor_layer_select(_file_layer);
+	editor_layer_select(file_layer);
 	
 	// Clear command stack.
 	editor_command_stack_clear();
 	
 	// Drawing loaded image.
-	surface_set_target(editor_layer_get(_file_layer).surface);
+	surface_set_target(editor_layer_get(file_layer).surface);
 	
 	// Drawing sprite.
 	draw_sprite(loaded_sprite, 0, 0, 0);
@@ -824,6 +826,9 @@ function editor_project_open(){
 	
 	// Updating title.
 	editor_project_update_window_title();
+	
+	// Mark as saved.
+	editor_project_is_saved = true;
 }
 
 function editor_project_update_window_title(){
@@ -887,6 +892,9 @@ function editor_project_save(){
 	
 	// Free memory.
 	surface_free(result_surface);
+	
+	// Mark project as saved.
+	editor_project_is_saved = true;
 }
 
 #endregion
@@ -916,6 +924,9 @@ editor_selected_layer = 0;
 // Edtir project filename.
 editor_project_filename = undefined;
 
+// Is current project saved or not.
+editor_project_is_saved = false;
+
 // Current selected tool.
 editor_selected_tool = eEDITOR_TOOL.PENCIL;
 
@@ -936,6 +947,7 @@ editor_project_new();
 // Updating title.
 editor_project_update_window_title();
 
+// Initialise queue.
 window_mouse_queue_init();
 
 #endregion
