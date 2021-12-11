@@ -117,6 +117,9 @@ function editor_layer_new(layer_name){
 	// Adding layer in editor layers.
 	array_push(editor_layers, new editor_layer(layer_name));
 	
+	// TODO - Clear stack for now.
+	editor_command_stack_clear();
+	
 	// Returning layer index.
 	return array_length(editor_layers) - 1;
 }
@@ -142,6 +145,9 @@ function editor_layer_clear(layer_index, color){
 	
 	// Resetting current surface.
 	surface_reset_target();
+	
+	// TODO - Clear stack for now.
+	editor_command_stack_clear();
 }
 
 function editor_layer_select(layer_index){
@@ -178,6 +184,9 @@ function editor_layers_free(){
 	
 	// Clearing.
 	editor_layers = [];
+	
+	// TODO - Clear stack for now.
+	editor_command_stack_clear();
 }
 
 function editor_layer_delete(layer_index){
@@ -212,6 +221,9 @@ function editor_layer_delete(layer_index){
 	
 	// Deleting layer.
 	array_delete(editor_layers, layer_index, 1);
+	
+	// TODO - Clear stack for now.
+	editor_command_stack_clear();
 }
 
 function editor_layer_move_up(layer_index){
@@ -256,13 +268,16 @@ function editor_layer_move_down(layer_index){
 
 function editor_layer_move(index_one, index_two){
 	// @description Swaps layers.
-	
+
 	// Swap buffer.
 	var swap_buffer = editor_layers[@ index_one];
 	
 	// Swapping.
 	editor_layers[@ index_one] = editor_layers[@ index_two];
 	editor_layers[@ index_two] = swap_buffer;
+	
+	// TODO - Clear stack for now.
+	editor_command_stack_clear();
 }
 
 #endregion
@@ -487,7 +502,7 @@ function editor_command_undo(){
 	if (array_length(editor_command_stack) == 0) return;
 	
 	// WIP FIX.
-	if (mouse_check_button(mb_left))return;
+	if (mouse_check_button(mb_left)) return;
 	
 	// Get command.
 	var command = array_pop(editor_command_stack);
