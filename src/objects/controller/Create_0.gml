@@ -25,9 +25,9 @@ function editor_layer(name) constructor{
 		// @description Function that shows (draws) layer.
 		
 		// Retunring if not visible.
-		if not self.is_visible return;
+		if (not self.is_visible) return;
 		
-		if not surface_exists(self.surface){
+		if (not surface_exists(self.surface)){
 			// If surface is not exists.
 			
 			// Loading surface.
@@ -134,10 +134,10 @@ function editor_layer_clear(layer_index, color){
 	// @param {color} color With what color clear.
 	
 	// Getting layer surface.
-	surface_set_target(editor_layer_get(layer_index).surface)
+	surface_set_target(editor_layer_get(layer_index).surface);
 
 	// Clearing.
-	draw_clear(color)
+	draw_clear(color);
 	
 	// Resetting current surface.
 	surface_reset_target();
@@ -158,7 +158,7 @@ function editor_layer_switch_visibility(layer_index){
 	// @param {real} layer_index Layer index to switch visibility..
 	
 	// Not processing if invalid layer.
-	if is_undefined(layer_index) return;
+	if (is_undefined(layer_index)) return;
 	
 	// Getting layer.
 	var current_layer = editor_layer_get(layer_index);
@@ -178,7 +178,7 @@ function editor_layers_free(){
 		editor_layer_get(current_layer_index).free();
 	}
 	
-	// Clearing.ed
+	// Clearing.
 	editor_layers = [];
 }
 
@@ -187,15 +187,15 @@ function editor_layer_delete(layer_index){
 	// @description Function that deletes layer.
 	
 	// Do not process if invalid.
-	if is_undefined(editor_selected_layer) return;
+	if (is_undefined(editor_selected_layer)) return;
 	
-	if editor_selected_layer == layer_index{
+	if (editor_selected_layer == layer_index){
 		// If deleting selected layer.
 		
 		// Selecting moved.
 		editor_selected_layer = layer_index - 1;
 		
-		if editor_selected_layer == -1{
+		if (editor_selected_layer == -1){
 			// If run out of bounds.
 			
 			// Set invalid layer.
@@ -212,12 +212,12 @@ function editor_layer_move_up(layer_index){
 	// @description Function that moves layer up.
 	
 	// Not processing if invalid layer.
-	if is_undefined(layer_index) return;
+	if (is_undefined(layer_index)) return;
 	
 	// Returning if first already.
-	if layer_index == 0 return;
+	if (layer_index == 0) return;
 	
-	if editor_selected_layer == layer_index{
+	if (editor_selected_layer == layer_index){
 		// If moving selected layer.
 		
 		// Selecting new index.
@@ -233,12 +233,12 @@ function editor_layer_move_down(layer_index){
 	// @description Function that moves layer up.
 	
 	// Not processing if invalid layer.
-	if is_undefined(layer_index) return;
+	if (is_undefined(layer_index)) return;
 	
 	// Returning if first already.
-	if layer_index == array_length(editor_layers) - 1 return;
+	if (layer_index == array_length(editor_layers) - 1) return;
 	
-	if editor_selected_layer == layer_index{
+	if (editor_selected_layer == layer_index){
 		// If moving selected layer.
 		
 		// Selecting new index.
@@ -304,27 +304,27 @@ function editor_draw_interface(x, y){
 	
 	// New layer.
 	x = 0;
-	if draw_button_sprite(x, y, ui_button_layer_new){
+	if (draw_button_sprite(x, y, ui_button_layer_new)){
 		editor_selected_layer = editor_layer_new("Layer " + string(array_length(editor_layers)));
 	}
 	// Delete layer.
 	x += sprite_get_width(ui_button_layer_new) + offset;
-	if draw_button_sprite(x, y, ui_button_layer_delete){
+	if (draw_button_sprite(x, y, ui_button_layer_delete)){
 		editor_layer_delete(editor_selected_layer);
 	}
 	// Layer up.
 	x += sprite_get_width(ui_button_layer_delete) + offset;
-	if draw_button_sprite(x, y, ui_button_layer_up){
+	if (draw_button_sprite(x, y, ui_button_layer_up)){
 		editor_layer_move_up(editor_selected_layer);
 	}
 	// Layer down.
 	x += sprite_get_width(ui_button_layer_up) + offset;
-	if draw_button_sprite(x, y, ui_button_layer_down){
+	if (draw_button_sprite(x, y, ui_button_layer_down)){
 		editor_layer_move_down(editor_selected_layer);
 	}
 	// Layer visibility.
 	x += sprite_get_width(ui_button_layer_down) + offset;
-	if draw_button_sprite(x, y, ui_button_layer_visibility){
+	if (draw_button_sprite(x, y, ui_button_layer_visibility)){
 		editor_layer_switch_visibility(editor_selected_layer);
 	}
 	
@@ -342,13 +342,13 @@ function editor_draw_interface(x, y){
 	
 	// Pencil tool.
 	x = 0;
-	if draw_button_sprite(x, y, ui_button_layer_tool_pencil){
+	if (draw_button_sprite(x, y, ui_button_layer_tool_pencil)){
 		// Current selected tool.
 		editor_selected_tool = eEDITOR_TOOL.PENCIL;
 	}
 	// Eraser tool.
 	x = sprite_get_width(ui_button_layer_tool_pencil) + offset;
-	if draw_button_sprite(x, y, ui_button_layer_tool_eraser){
+	if (draw_button_sprite(x, y, ui_button_layer_tool_eraser)){
 		// Current selected tool.
 		editor_selected_tool = eEDITOR_TOOL.ERASER;
 	}
@@ -360,7 +360,7 @@ function editor_draw_interface(x, y){
 	y = (sprite_get_height(ui_button_layer_new) + offset + string_height("Layers"));
 	offset = 20;
 	
-	if array_length(editor_layers) == 0{
+	if (array_length(editor_layers) == 0){
 		// If empty.
 		
 		// No layers.
@@ -373,10 +373,10 @@ function editor_draw_interface(x, y){
 		// Getting layer.
 		var current_layer = editor_layer_get(current_layer_index);
 		
-		if current_layer_index == editor_selected_layer{
+		if (current_layer_index == editor_selected_layer){
 			// If selected layer.
 			
-			if current_layer.is_visible{
+			if (current_layer.is_visible){
 				// If visible.
 				
 				// Setting color.
@@ -390,7 +390,7 @@ function editor_draw_interface(x, y){
 		}else{
 			// If not selected.
 			
-			if current_layer.is_visible{
+			if (current_layer.is_visible){
 				// If visible.
 				
 				// Setting color.
@@ -404,10 +404,10 @@ function editor_draw_interface(x, y){
 		}
 		
 		// Getting layer name.
-		var _layer_name = "\"" + current_layer.name + "\""
+		var layer_name = "\"" + current_layer.name + "\"";
 		
 		// Drawing layer.
-		if draw_button_text(floor(offset * .5), y + offset * current_layer_index, _layer_name){
+		if (draw_button_text(floor(offset * .5), y + offset * current_layer_index, layer_name)){
 			// If clicked.
 			
 			// Selecting layer.
@@ -428,11 +428,11 @@ function draw_button_sprite(x, y, sprite){
 	draw_sprite(sprite, image_index, x, y);
 	
 	// Returning.
-	if point_in_rectangle(mouse_x, mouse_y, x, y, x + sprite_get_width(sprite), y + sprite_get_height(sprite)){
+	if (point_in_rectangle(mouse_x, mouse_y, x, y, x + sprite_get_width(sprite), y + sprite_get_height(sprite))){
 		// If hovered.
 		
 		// Returning.
-		if mouse_check_button_pressed(mb_left) return true;
+		if (mouse_check_button_pressed(mb_left)) return true;
 	}
 	
 	// Returning.
@@ -451,11 +451,11 @@ function draw_button_text(x, y, text){
 	draw_text(x, y, text);
 	
 	// Returning.
-	if point_in_rectangle(mouse_x, mouse_y, x, y, x + string_width(text), y + string_height(text)){
+	if (point_in_rectangle(mouse_x, mouse_y, x, y, x + string_width(text), y + string_height(text))){
 		// If hovered.
 		
 		// Returning.
-		if mouse_check_button_pressed(mb_left) return true;
+		if (mouse_check_button_pressed(mb_left)) return true;
 	}
 	
 	// Returning.
@@ -484,10 +484,10 @@ function editor_command_undo(){
 	// @description Undo command.
 	
 	// Return if no commands.
-	if array_length(editor_command_stack) == 0 return;
+	if (array_length(editor_command_stack) == 0) return;
 	
 	// WIP FIX.
-	if mouse_check_button(mb_left) return;
+	if (mouse_check_button(mb_left))return;
 	
 	// Get command.
 	var command = array_pop(editor_command_stack);
@@ -522,23 +522,23 @@ function editor_update_hotkeys(){
 	// @description Function that updates hotkeys.
 	
 	// Undo command.
-	if keyboard_check(vk_control) and keyboard_check_pressed(ord("Z")) return editor_command_undo();
+	if (keyboard_check(vk_control) and keyboard_check_pressed(ord("Z"))) return editor_command_undo();
 	
 	// Open hotkey.
-	if keyboard_check(vk_control) and keyboard_check_pressed(ord("O")) return editor_project_open();
+	if (keyboard_check(vk_control) and keyboard_check_pressed(ord("O"))) return editor_project_open();
 	
 	// New hotkey.
-	if keyboard_check(vk_control) and keyboard_check_pressed(ord("N")) return editor_project_new();
+	if (keyboard_check(vk_control) and keyboard_check_pressed(ord("N"))) return editor_project_new();
 	
 	// Save hotkey.
-	if keyboard_check(vk_control) and keyboard_check_pressed(ord("S")) return editor_project_save()
+	if (keyboard_check(vk_control) and keyboard_check_pressed(ord("S"))) return editor_project_save();
 }
 
 function editor_update_draw(){
 	// @function editor_update_draw()
 	// @description Function that updates editor draw.
 	
-	if mouse_check_button_pressed(mb_left){
+	if (mouse_check_button_pressed(mb_left)){
 		// If click.
 		
 		// Getting layer draw positions.
@@ -570,24 +570,24 @@ function editor_update_draw(){
 		
 	}
 	
-	if mouse_check_button_released(mb_left){
+	if (mouse_check_button_released(mb_left)){
 		// If released.
 		
 		// Push command.
-		if not is_undefined(editor_command_stack_temporary){
+		if (not is_undefined(editor_command_stack_temporary)){
 			array_push(editor_command_stack, editor_command_stack_temporary);
 			editor_command_stack_temporary = undefined;
 		}
 	}
 	
-	if mouse_check_button(mb_left){
+	if (mouse_check_button(mb_left)){
 		// If pressed.
 		
 		// Update queue.
 		var queue_points_count = window_mouse_queue_get(editor_mouse_queue_x, editor_mouse_queue_y);
 		if (mouse_check_button_pressed(mb_left)) queue_points_count += 2;
 		
-		if queue_points_count != 0{
+		if (queue_points_count != 0){
 			// If we have something to draw.
 			
 			// Getting layer.
@@ -620,7 +620,7 @@ function editor_update_draw(){
 				// Get difference.
 				var difference = abs(x1 - x2) + abs(y1 - y2);
 								
-				if difference >= radius / threeshold{
+				if (difference >= radius / threeshold){
 					// If difference too much.
 									
 					// Recursion.
@@ -635,7 +635,7 @@ function editor_update_draw(){
 				// For all queue points.
 				
 				// Skip if we gonna break.
-				if queue_point_index - 1 < 0 continue;
+				if (queue_point_index - 1 < 0) continue;
 				
 				// Getting layer draw positions.
 				var draw_x = (editor_mouse_queue_x[| queue_point_index] - editor_view_x) / editor_zoom;
@@ -682,7 +682,7 @@ function editor_update_move(){
 	// @function editor_update_move()
 	// @description Function that updates editor move.
 	
-	if mouse_check_button_pressed(mb_right){
+	if (mouse_check_button_pressed(mb_right)){
 		// If click.
 		
 		// Remebmer editor move pos.
@@ -691,7 +691,7 @@ function editor_update_move(){
 	}else{
 		// If not click.
 		
-		if mouse_check_button(mb_right){
+		if (mouse_check_button(mb_right)){
 			// If hold.
 			
 			// Moving.
@@ -709,11 +709,11 @@ function editor_update_move(){
 	var zoom_min = 0.25;
 	var zoom_max = 5;
 	
-	if mouse_wheel_up(){
+	if (mouse_wheel_up()){
 		// Zoom in.
 		editor_zoom = clamp(editor_zoom + zoom_step, zoom_min, zoom_max);
 	}else{
-		if mouse_wheel_down(){
+		if (mouse_wheel_down()){
 			// Zoom out.
 			editor_zoom = clamp(editor_zoom - zoom_step, zoom_min, zoom_max);
 		}
@@ -758,7 +758,7 @@ function editor_project_open(){
 	// Getting selected filename.
 	var selected_filename = get_open_filename("Images (PNG)|*.png", "");
 	
-	if not file_exists(selected_filename){
+	if (not file_exists(selected_filename)){
 		// If file we selected is not existing.
 		
 		// Returning from opening.
@@ -806,7 +806,7 @@ function editor_project_update_window_title(){
 	// @function editor_project_update_window_title()
 	// @description Function that updates window title.
 	
-	if is_undefined(editor_project_filename){
+	if (is_undefined(editor_project_filename)){
 		// If not set project filename.
 		
 		// Caption.
@@ -823,11 +823,11 @@ function editor_project_save(){
 	// @function editor_project_save()
 	// @description Function that saves project.
 	
-	if is_undefined(editor_project_filename){
+	if (is_undefined(editor_project_filename)){
 		// If undefined project filename.
 		
 		// Getting filename.
-		editor_project_filename = get_save_filename("Images (PNG)|*.png", "")
+		editor_project_filename = get_save_filename("Images (PNG)|*.png", "");
 		
 		// Update.
 		editor_project_update_window_title();
@@ -845,7 +845,7 @@ function editor_project_save(){
 		// Getting layer.
 		var current_layer = editor_layer_get(current_layer_index);
 		
-		if not surface_exists(current_layer.surface){
+		if (not surface_exists(current_layer.surface)){
 			// If surface is not exists.
 			
 			// Loading surface.
@@ -874,7 +874,7 @@ function editor_project_save(){
 #region Entry point.
 
 // Lists for window_mouse_queque extension.
-editor_mouse_queue_x = ds_list_create()
+editor_mouse_queue_x = ds_list_create();
 editor_mouse_queue_y = ds_list_create();
 	
 // Editor width, height.
