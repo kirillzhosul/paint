@@ -475,6 +475,9 @@ function editor_command_stack_clear(){
 		editor_command_stack[command_index].free();
 		editor_command_stack[command_index] = undefined;
 	}
+	
+	// Reset stack.
+	editor_command_stack = [];
 }
 
 function editor_command_undo(){
