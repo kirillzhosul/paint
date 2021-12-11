@@ -195,8 +195,18 @@ function editor_layer_delete(layer_index){
 		if (editor_selected_layer == -1){
 			// If run out of bounds.
 			
-			// Set invalid layer.
-			editor_selected_layer = undefined;
+			if (array_length(editor_layers) != 0){
+				// If there is any layer.
+				
+				// Select first layer.
+				editor_selected_layer = 0;
+			}else{
+				// If last layer.
+				
+				// Set invalid layer.
+				editor_selected_layer = undefined;
+			}
+
 		}
 	}
 	
