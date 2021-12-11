@@ -19,10 +19,16 @@ function editor_layer(name) constructor{
 	
 	// Layer is visible.
 	self.is_visible = true;
-
-	self.show = function(){
-		// @function editor_layer.show()
-		// @description Function that shows (draws) layer.
+	
+	self.create_surface = function (){
+		// @description Creates surface.
+		
+		// Create.
+		self.surface = surface_create(controller.editor_width, controller.editor_heigth);
+	}
+	
+	self.show = function (){
+		// @description Shows (draws) layer.
 		
 		// Retunring if not visible.
 		if (not self.is_visible) return;
@@ -31,7 +37,7 @@ function editor_layer(name) constructor{
 			// If surface is not exists.
 			
 			// Loading surface.
-			self.surface = surface_create(controller.editor_width, controller.editor_heigth);
+			self.create_surface();
 			buffer_set_surface(self.buffer, self.surface, 0);
 		}else{
 			// If all OK.
@@ -45,8 +51,7 @@ function editor_layer(name) constructor{
 	}
 	
 	self.reset = function (surface){
-		// @function editor_layer.reset()
-		// @description Function that reset.
+		// @description Reset.
 		
 		// Destroy old data.
 		self.free();
@@ -56,13 +61,12 @@ function editor_layer(name) constructor{
 		
 		// Create and set buffer.
 		self.buffer = buffer_create(1, buffer_grow, 1);
-		self.surface = surface_create(controller.editor_width, controller.editor_heigth);
+		self.create_surface();
 		buffer_get_surface(self.buffer, self.surface, 0);
 	}
 	
 	self.free = function(){
-		// @function editor_layer.free()
-		// @description Function that frees layer.
+		// @description Frees layer.
 		
 		// Free layer.
 		surface_free(self.surface);
@@ -80,7 +84,6 @@ function editor_stack_command(layer_index, layer_surface) constructor{
 	self.layer_surface = layer_surface;
 	
 	self.free = function (){
-		// @function editor_stack_command.free()
 		// @description Frees stack command.
 		
 		// Free surface.
@@ -107,8 +110,7 @@ enum eEDITOR_TOOL{
 #region Layers.
 
 function editor_layer_new(layer_name){
-	// @function editor_layer_new(layer_name)
-	// @description Function that creates new layer in editor.
+	// @description Creates new layer in editor.
 	// @param {string} layer_name Name for layer.
 	// @returns {real} Layer index.
 	
@@ -120,8 +122,7 @@ function editor_layer_new(layer_name){
 }
 
 function editor_layer_get(layer_index){
-	// @function editor_layer_get(layer_index)
-	// @description Function that returns editor layer with given index.
+	// @description Returns editor layer with given index.
 	// @returns {array} Layer.
 	
 	// Returning layer.
@@ -129,8 +130,7 @@ function editor_layer_get(layer_index){
 }
 
 function editor_layer_clear(layer_index, color){
-	// @function editor_layer_clear(layer_index, color)
-	// @description Function that clears layer with given color.
+	// @description Clears layer with given color.
 	// @param {real} layer_index Layer index to clear.
 	// @param {color} color With what color clear.
 	
@@ -145,8 +145,7 @@ function editor_layer_clear(layer_index, color){
 }
 
 function editor_layer_select(layer_index){
-	// @function editor_layer_select(layer_index)
-	// @description Function that selects layer.
+	// @description Selects layer.
 	// @param {real} layer_index Layer index to select.
 	
 	// Selecting.
@@ -154,8 +153,7 @@ function editor_layer_select(layer_index){
 }
 
 function editor_layer_switch_visibility(layer_index){
-	// @function editor_layer_switch_visibility(layer_index)
-	// @description Function that switch layer visibility.
+	// @description Switch layer visibility.
 	// @param {real} layer_index Layer index to switch visibility..
 	
 	// Not processing if invalid layer.
@@ -169,8 +167,7 @@ function editor_layer_switch_visibility(layer_index){
 }
 
 function editor_layers_free(){
-	// @function editor_layers_free()
-	// @description Function that frees all layers.
+	// @description Frees all layers.
 	
 	for (var current_layer_index = 0;current_layer_index < array_length(editor_layers); current_layer_index++){
 		// Iterate over all layers.
@@ -184,8 +181,7 @@ function editor_layers_free(){
 }
 
 function editor_layer_delete(layer_index){
-	// @function editor_layer_delete(layer_index)
-	// @description Function that deletes layer.
+	// @description Deletes layer.
 	
 	// Do not process if invalid.
 	if (is_undefined(editor_selected_layer)) return;
@@ -209,8 +205,7 @@ function editor_layer_delete(layer_index){
 }
 
 function editor_layer_move_up(layer_index){
-	// @function editor_layer_move_up(layer_index)
-	// @description Function that moves layer up.
+	// @description Moves layer up.
 	
 	// Not processing if invalid layer.
 	if (is_undefined(layer_index)) return;
@@ -230,8 +225,7 @@ function editor_layer_move_up(layer_index){
 }
 
 function editor_layer_move_down(layer_index){
-	// @function editor_layer_move_up(layer_index)
-	// @description Function that moves layer up.
+	// @description Moves layer up.
 	
 	// Not processing if invalid layer.
 	if (is_undefined(layer_index)) return;
@@ -251,8 +245,7 @@ function editor_layer_move_down(layer_index){
 }
 
 function editor_layer_move(index_one, index_two){
-	// @function editor_layer_move(index_one, index_two)
-	// @description Function that swaps layers.
+	// @description Swaps layers.
 	
 	// Swap buffer.
 	var swap_buffer = editor_layers[@ index_one];
@@ -267,8 +260,7 @@ function editor_layer_move(index_one, index_two){
 #region Drawing.
 
 function editor_draw(){
-	// @function editor_draw()
-	// @description Function that draws editor.
+	// @description Draws editor.
 	
 	// Drawing layers.
 	editor_draw_layers();
@@ -278,8 +270,7 @@ function editor_draw(){
 }
 
 function editor_draw_layers(){
-	// @function editor_draw_layers()
-	// @description Function that draws editor layers.
+	// @description Draws editor layers.
 
 	for (var current_layer_index = array_length(editor_layers) - 1;current_layer_index >= 0; current_layer_index--){
 		// Iterating over all layers.
@@ -290,8 +281,7 @@ function editor_draw_layers(){
 }
 
 function editor_draw_interface(x, y){
-	// @function editor_draw_interface()
-	// @description Function that draws editor interface.
+	// @description Draws editor interface.
 	
 	// Drawing color, font.
 	draw_set_color(c_white);
@@ -418,8 +408,7 @@ function editor_draw_interface(x, y){
 }
 
 function draw_button_sprite(x, y, sprite){
-	// @function draw_button_sprite(x, y, sprite)
-	// @description Function that draws sprite and returns is pressed or not.
+	// @description Draws sprite and returns is pressed or not.
 	// @param {real} x X position to draw on.
 	// @param {real} y Y position to draw on.
 	// @param {sprite} sprite Sprite to draw.
@@ -441,8 +430,7 @@ function draw_button_sprite(x, y, sprite){
 }
 
 function draw_button_text(x, y, text){
-	// @function draw_button_text(x, y, text)
-	// @description Function that draws text and returns is pressed or not.
+	// @description Draws text and returns is pressed or not.
 	// @param {real} x X position to draw on.
 	// @param {real} y Y position to draw on.
 	// @param {string} text String to draw.
@@ -468,7 +456,6 @@ function draw_button_text(x, y, text){
 #region Command.
 
 function editor_command_stack_clear(){
-	// @function editor_command_stack_clear()
 	// @description Clears command stack.
 	
 	for (var command_index = 0; command_index < array_length(editor_command_stack); command_index++){
@@ -481,7 +468,6 @@ function editor_command_stack_clear(){
 }
 
 function editor_command_undo(){
-	// @function editor_command_undo()
 	// @description Undo command.
 	
 	// Return if no commands.
@@ -505,8 +491,7 @@ function editor_command_undo(){
 #region Updating.
 
 function editor_update(){
-	// @function editor_update()
-	// @description Function that updates editor.
+	// @description Updates editor.
 	
 	// Updating move.
 	editor_update_move();
@@ -519,8 +504,7 @@ function editor_update(){
 }
 
 function editor_update_hotkeys(){
-	// @function editor_update_hotkeys()
-	// @description Function that updates hotkeys.
+	// @description Updates hotkeys.
 	
 	// Undo command.
 	if (keyboard_check(vk_control) and keyboard_check_pressed(ord("Z"))) return editor_command_undo();
@@ -536,8 +520,7 @@ function editor_update_hotkeys(){
 }
 
 function editor_update_draw(){
-	// @function editor_update_draw()
-	// @description Function that updates editor draw.
+	// @description Uupdates editor draw.
 	
 	if (mouse_check_button_pressed(mb_left)){
 		// If click.
@@ -610,8 +593,7 @@ function editor_update_draw(){
 			}
 							
 			var draw_function = function __draw_function(x1, y1, x2, y2){
-				// @function __draw_function()
-				// @description Function that draws.
+				// @description Draws.
 								
 				// Settings.
 				var curve = 0.1;
@@ -680,8 +662,7 @@ function editor_update_draw(){
 }
 
 function editor_update_move(){
-	// @function editor_update_move()
-	// @description Function that updates editor move.
+	// @description Updates editor move.
 	
 	if (mouse_check_button_pressed(mb_right)){
 		// If click.
@@ -726,8 +707,7 @@ function editor_update_move(){
 #region Projects.
 
 function editor_project_new(){
-	// @function editor_project_new()
-	// @description Function that opens new project.
+	// @description Opens new project.
 	
 	// Undefined project filename.
 	editor_project_filename = undefined;
@@ -753,8 +733,7 @@ function editor_project_new(){
 }
 
 function editor_project_open(){
-	// @function editor_project_open()
-	// @description Function that opens project from file.
+	// @description Opens project from file.
 	
 	// Getting selected filename.
 	var selected_filename = get_open_filename("Images (PNG)|*.png", "");
@@ -804,8 +783,7 @@ function editor_project_open(){
 }
 
 function editor_project_update_window_title(){
-	// @function editor_project_update_window_title()
-	// @description Function that updates window title.
+	// @description Updates window title.
 	
 	if (is_undefined(editor_project_filename)){
 		// If not set project filename.
@@ -821,8 +799,7 @@ function editor_project_update_window_title(){
 }
 
 function editor_project_save(){
-	// @function editor_project_save()
-	// @description Function that saves project.
+	// @description Saves project.
 	
 	if (is_undefined(editor_project_filename)){
 		// If undefined project filename.
@@ -850,7 +827,7 @@ function editor_project_save(){
 			// If surface is not exists.
 			
 			// Loading surface.
-			current_layer.surface = surface_create(controller.editor_width, controller.editor_heigth);
+			current_layer.create_surface();
 			buffer_set_surface(current_layer.buffer, current_layer.surface, 0);
 		}
 		
