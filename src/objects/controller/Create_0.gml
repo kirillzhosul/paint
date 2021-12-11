@@ -195,7 +195,7 @@ function editor_layer_delete(layer_index){
 		if (editor_selected_layer == -1){
 			// If run out of bounds.
 			
-			if (array_length(editor_layers) != 0){
+			if (array_length(editor_layers) - 1 != 0){
 				// If there is any layer.
 				
 				// Select first layer.
