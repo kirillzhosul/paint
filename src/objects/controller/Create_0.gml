@@ -32,12 +32,12 @@ function editor_layer(name) constructor{
 			
 			// Loading surface.
 			self.surface = surface_create(controller.editor_width, controller.editor_heigth);
-			buffer_get_surface(self.buffer, self.surface, 0);
+			buffer_set_surface(self.buffer, self.surface, 0);
 		}else{
 			// If all OK.
 			
 			// Buffering surface.
-			buffer_set_surface(self.buffer, self.surface, 0);
+			buffer_get_surface(self.buffer, self.surface, 0);
 		}
 
 		// Drawing.
@@ -56,7 +56,8 @@ function editor_layer(name) constructor{
 		
 		// Create and set buffer.
 		self.buffer = buffer_create(1, buffer_grow, 1);
-		buffer_set_surface(self.buffer, self.surface, 0);
+		self.surface = surface_create(controller.editor_width, controller.editor_heigth);
+		buffer_get_surface(self.buffer, self.surface, 0);
 	}
 	
 	self.free = function(){
@@ -850,7 +851,7 @@ function editor_project_save(){
 			
 			// Loading surface.
 			current_layer.surface = surface_create(controller.editor_width, controller.editor_heigth);
-			buffer_get_surface(current_layer.buffer, current_layer.surface, 0);
+			buffer_set_surface(current_layer.buffer, current_layer.surface, 0);
 		}
 		
 		// Drawing.
