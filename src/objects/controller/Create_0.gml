@@ -506,17 +506,20 @@ function editor_update(){
 function editor_update_hotkeys(){
 	// @description Updates hotkeys.
 	
+	// Keybind.
+	if (not keyboard_check(vk_control)) return;
+	
 	// Undo command.
-	if (keyboard_check(vk_control) and keyboard_check_pressed(ord("Z"))) return editor_command_undo();
+	if (keyboard_check_pressed(ord("Z"))) return editor_command_undo();
 	
 	// Open hotkey.
-	if (keyboard_check(vk_control) and keyboard_check_pressed(ord("O"))) return editor_project_open();
+	if (keyboard_check_pressed(ord("O"))) return editor_project_open();
 	
 	// New hotkey.
-	if (keyboard_check(vk_control) and keyboard_check_pressed(ord("N"))) return editor_project_new();
+	if (keyboard_check_pressed(ord("N"))) return editor_project_new();
 	
 	// Save hotkey.
-	if (keyboard_check(vk_control) and keyboard_check_pressed(ord("S"))) return editor_project_save();
+	if (keyboard_check_pressed(ord("S"))) return editor_project_save();
 }
 
 function editor_update_draw(){
