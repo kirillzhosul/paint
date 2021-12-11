@@ -536,7 +536,17 @@ function editor_update_draw(){
 	// @description Uupdates editor draw.
 	
 	// Return if no selected layer.
-	if (is_undefined(editor_selected_layer)) return;
+	if (is_undefined(editor_selected_layer)){
+		// If no selected layer.
+		
+		// Clear queue.
+		ds_list_clear(editor_mouse_queue_x);
+		ds_list_clear(editor_mouse_queue_y);
+		window_mouse_queue_clear();
+		
+		// Returning.
+		return;
+	};
 	
 	if (mouse_check_button_pressed(mb_left)){
 		// If click.
