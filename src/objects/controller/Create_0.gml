@@ -5,7 +5,7 @@
 
 #region Layer.
 
-function editor_layer(name) constructor{
+function sEditorLayer(name) constructor{
 	// Layer struct.
 	
 	// Layer name.
@@ -73,7 +73,11 @@ function editor_layer(name) constructor{
 	}
 }
 
-function editor_stack_command(layer_index, layer_surface) constructor{
+#endregion
+
+#region Stack command.
+
+function sEditorStackCommand(layer_index, layer_surface) constructor{
 	// Stack command struct.
 	
 	// Layer index.
@@ -114,7 +118,7 @@ function editor_layer_new(layer_name){
 	// @returns {real} Layer index.
 	
 	// Adding layer in editor layers.
-	array_push(editor_layers, new editor_layer(layer_name));
+	array_push(editor_layers, new sEditorLayer(layer_name));
 	
 	// TODO - Clear stack for now.
 	editor_command_stack_clear();
@@ -583,7 +587,7 @@ function editor_update_draw(){
 			surface_copy(command_surface, 0, 0, current_layer.surface);
 		
 			// Remember command.
-			editor_command_stack_temporary = new editor_stack_command(editor_selected_layer, command_surface);
+			editor_command_stack_temporary = new sEditorStackCommand(editor_selected_layer, command_surface);
 		}
 		
 		// Clear queue.
