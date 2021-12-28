@@ -103,7 +103,8 @@ function sEditorStackCommand(layer_index, layer_surface) constructor{
 // Editor tools.
 enum eEDITOR_TOOL{
 	PENCIL,
-	ERASER
+	ERASER,
+	RECTANGLE
 }
 
 #endregion
@@ -371,6 +372,14 @@ function editor_draw_interface(x, y){
 		// Current selected tool.
 		editor_selected_tool = eEDITOR_TOOL.ERASER;
 	}
+	// Rectangle tool.
+	// TODO: Add own sprite for the rectangle tool (not pencil).
+	x += sprite_get_width(ui_button_layer_tool_eraser) + offset;
+	if (draw_button_sprite(x, y, ui_button_layer_tool_pencil)){
+		// Current selected tool.
+		editor_selected_tool = eEDITOR_TOOL.RECTANGLE;
+	}
+	
 	
 	// Drawing layers text.
 	draw_text(offset, sprite_get_height(ui_button_layer_new) + offset, "Layers: ");
@@ -642,6 +651,9 @@ function editor_update_draw(){
 					// Drawing color.
 					draw_set_color(c_green);
 				break;
+				case eEDITOR_TOOL.RECTANGLE:
+					// Nothing.
+				break;
 			}
 							
 			var draw_function = function __draw_function(x1, y1, x2, y2){
@@ -694,6 +706,11 @@ function editor_update_draw(){
 
 						// Drawing.
 						draw_function(draw_x_previous, draw_y_previous, draw_x, draw_y);
+					break;
+					case eEDITOR_TOOL.RECTANGLE:
+						// If rectangle.
+						
+						// TODO: Add rectangular tools selection.
 					break;
 				}
 
