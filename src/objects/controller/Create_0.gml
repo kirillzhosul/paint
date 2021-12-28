@@ -318,12 +318,18 @@ function editor_draw_rectangular_tool_preview(){
 		break;
 	}
 			
+	// Get position.
+	var x1 = editor_rectangular_shape_start[0];
+	var y1 = editor_rectangular_shape_start[1];
+	var x2 = editor_rectangular_shape_end[0];
+	var y2 = editor_rectangular_shape_end[1];
+	x2 = clamp(x2, editor_view_x - 1, editor_view_x + editor_width - 1);
+	y2 = clamp(y2, editor_view_y - 1, editor_view_y + editor_heigth - 1);
+	x1 = clamp(x1, editor_view_x, editor_view_x + editor_width);
+	y1 = clamp(y1, editor_view_y, editor_view_y + editor_heigth);
+	
 	// Draw preview rectangle.
-	draw_rectangle((editor_rectangular_shape_start[0]), 
-				   (editor_rectangular_shape_start[1]), 
-				   (editor_rectangular_shape_end[0]), 
-				   (editor_rectangular_shape_end[1]), 
-				   false);
+	draw_rectangle(x1, y1, x2, y2,false);
 }
 
 function editor_draw_layers(){
