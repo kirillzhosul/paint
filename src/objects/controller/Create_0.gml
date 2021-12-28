@@ -380,7 +380,6 @@ function editor_draw_interface(x, y){
 		editor_selected_tool = eEDITOR_TOOL.RECTANGLE;
 	}
 	
-	
 	// Drawing layers text.
 	draw_text(offset, sprite_get_height(ui_button_layer_new) + offset, "Layers: ");
 	
@@ -441,6 +440,13 @@ function editor_draw_interface(x, y){
 			// Selecting layer.
 			editor_layer_select(current_layer_index);
 		}
+	}
+			
+	if (editor_selected_tool == eEDITOR_TOOL.RECTANGLE){
+		draw_set_color(c_red);
+		draw_rectangle(editor_rectangular_shape_start[0], editor_rectangular_shape_start[1], 
+					   editor_rectangular_shape_end[0], editor_rectangular_shape_end[1], 
+					   false);
 	}
 }
 
@@ -599,6 +605,9 @@ function editor_update_draw(){
 			editor_command_stack_temporary = new sEditorStackCommand(editor_selected_layer, command_surface);
 		}
 		
+		// Rectangular shape begin.
+		editor_rectangular_shape_start = [mouse_x, mouse_y];
+		
 		// Clear queue.
 		ds_list_clear(editor_mouse_queue_x);
 		ds_list_clear(editor_mouse_queue_y);
@@ -710,7 +719,8 @@ function editor_update_draw(){
 					case eEDITOR_TOOL.RECTANGLE:
 						// If rectangle.
 						
-						// TODO: Add rectangular tools selection.
+						// Just remember end position.
+						editor_rectangular_shape_end = [mouse_x, mouse_y];
 					break;
 				}
 
@@ -961,7 +971,12 @@ function editor_close_event(){
 // Lists for window_mouse_queque extension.
 editor_mouse_queue_x = ds_list_create();
 editor_mouse_queue_y = ds_list_create();
-	
+
+// Rectangular shape position.
+// TODO: Add vector2 struct.
+editor_rectungular_shape_start = [-1, -1];
+editor_rectangular_shape_end = [-1, -1];
+
 // Editor width, height.
 editor_width = floor(room_width / 2);
 editor_heigth = floor(room_height / 2);
