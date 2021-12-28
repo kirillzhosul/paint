@@ -375,7 +375,7 @@ function editor_draw_interface(x, y){
 	// Rectangle tool.
 	// TODO: Add own sprite for the rectangle tool (not pencil).
 	x += sprite_get_width(ui_button_layer_tool_eraser) + offset;
-	if (draw_button_sprite(x, y, ui_button_layer_tool_pencil)){
+	if (draw_button_sprite(x, y, ui_button_layer_tool_rectangle)){
 		// Current selected tool.
 		editor_selected_tool = eEDITOR_TOOL.RECTANGLE;
 	}
