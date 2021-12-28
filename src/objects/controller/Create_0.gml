@@ -293,7 +293,7 @@ function editor_draw(){
 	
 	// Drawing layers.
 	editor_draw_layers();
-	
+
 	// Drawing interface.
 	editor_draw_interface(0, 0);
 }
@@ -440,13 +440,6 @@ function editor_draw_interface(x, y){
 			// Selecting layer.
 			editor_layer_select(current_layer_index);
 		}
-	}
-			
-	if (editor_selected_tool == eEDITOR_TOOL.RECTANGLE){
-		draw_set_color(c_red);
-		draw_rectangle(editor_rectangular_shape_start[0], editor_rectangular_shape_start[1], 
-					   editor_rectangular_shape_end[0], editor_rectangular_shape_end[1], 
-					   false);
 	}
 }
 
@@ -605,9 +598,6 @@ function editor_update_draw(){
 			editor_command_stack_temporary = new sEditorStackCommand(editor_selected_layer, command_surface);
 		}
 		
-		// Rectangular shape begin.
-		editor_rectangular_shape_start = [mouse_x, mouse_y];
-		
 		// Clear queue.
 		ds_list_clear(editor_mouse_queue_x);
 		ds_list_clear(editor_mouse_queue_y);
@@ -627,115 +617,155 @@ function editor_update_draw(){
 	if (mouse_check_button_released(mb_left)){
 		// If released.
 		
-		// Push command.
-		if (not is_undefined(editor_command_stack_temporary)){
-			array_push(editor_command_stack, editor_command_stack_temporary);
-			editor_command_stack_temporary = undefined;
+		if (not editor_selected_tool_is_rectangular()){
+			// If not rectangular tools.
+			
+			// Push command.
+			if (not is_undefined(editor_command_stack_temporary)){
+				array_push(editor_command_stack, editor_command_stack_temporary);
+				editor_command_stack_temporary = undefined;
+			}
+		}else{
+			// If rectangular.
+		
+			// Tools.
+			switch(editor_selected_tool){
+				case eEDITOR_TOOL.RECTANGLE:
+					// Drawing color.
+					draw_set_color(c_red);
+				break;
+			}
+			
+			// Getting layer.
+			var current_layer = editor_layer_get(editor_selected_layer);
+				
+			// Start draw.
+			surface_set_target(current_layer.surface);
+
+			// Draw final rectangle.
+			draw_rectangle((editor_rectangular_shape_start[0] - editor_view_x)  / editor_zoom, 
+						   (editor_rectangular_shape_start[1] - editor_view_y) / editor_zoom, 
+						   (editor_rectangular_shape_end[0] - editor_view_x) / editor_zoom, 
+						   (editor_rectangular_shape_end[1] - editor_view_y) / editor_zoom, 
+						   false);
+						   
+			// End draw.
+			surface_reset_target();
 		}
 	}
 	
 	if (mouse_check_button(mb_left)){
 		// If pressed.
 		
-		// Update queue.
-		var queue_points_count = window_mouse_queue_get(editor_mouse_queue_x, editor_mouse_queue_y);
-		if (mouse_check_button_pressed(mb_left)) queue_points_count += 2;
-		
-		if (queue_points_count != 0){
-			// If we have something to draw.
+		if (editor_selected_tool_is_rectangular()){
+			// If rectangular tools.
 			
-			// Getting layer.
-			var current_layer = editor_layer_get(editor_selected_layer);
-			
-			// Start draw.
-			surface_set_target(current_layer.surface);
-
-			// Tools.
-			switch(editor_selected_tool){
-				case eEDITOR_TOOL.ERASER:
-					// GPU Blendbmode.
-					gpu_set_blendmode(bm_subtract);
-				break;
-				case eEDITOR_TOOL.PENCIL:
-					// Drawing color.
-					draw_set_color(c_green);
-				break;
-				case eEDITOR_TOOL.RECTANGLE:
-					// Nothing.
-				break;
+			if (mouse_check_button_pressed(mb_left)){
+				// If hold begin.
+				
+				// Rectangular shape begin.
+				editor_rectangular_shape_start = [mouse_x, mouse_y];
+				// Rectangular shape end.
+				editor_rectangular_shape_end = [mouse_x, mouse_y];
 			}
-							
-			var draw_function = function __draw_function(x1, y1, x2, y2){
-				// @description Draws.
-								
-				// Settings.
-				var curve = 0.1;
-				var threeshold = 2;
-				var radius = 8;
-								
-				// Get difference.
-				var difference = abs(x1 - x2) + abs(y1 - y2);
-								
-				if (difference >= radius / threeshold){
-					// If difference too much.
-									
-					// Recursion.
-					__draw_function(lerp(x1, x2, curve), lerp(y1, y2, curve), x2, y2);
-				}
-								
-				// Main element.
-				draw_circle(x1, y1, radius, false);
-			};
-			
-			for (var queue_point_index = queue_points_count - 1; queue_point_index >= 0; queue_point_index --){
-				// For all queue points.
-				
-				// Skip if we gonna break.
-				if (queue_point_index - 1 < 0) continue;
-				
-				// Getting layer draw positions.
-				var draw_x = (editor_mouse_queue_x[| queue_point_index] - editor_view_x) / editor_zoom;
-				var draw_y = (editor_mouse_queue_y[| queue_point_index] - editor_view_y) / editor_zoom;
-							
-				// Get previous.
-				var draw_x_previous = (editor_mouse_queue_x[| queue_point_index - 1] - editor_view_x) / editor_zoom;
-				var draw_y_previous = (editor_mouse_queue_y[| queue_point_index - 1] - editor_view_y) / editor_zoom;
-							
-				switch(editor_selected_tool){
-					// Selecting tool.
-				
-					case eEDITOR_TOOL.ERASER:
-						// If eraser.
 
-						// Drawing.
-						draw_function(draw_x_previous, draw_y_previous, draw_x, draw_y);
+			// Rectangular shape end.
+			editor_rectangular_shape_end = [mouse_x, mouse_y];
+		}else{
+			// If not rectangular tools. 
+	
+			// Update queue.
+			var queue_points_count = window_mouse_queue_get(editor_mouse_queue_x, editor_mouse_queue_y);
+			if (mouse_check_button_pressed(mb_left)) queue_points_count += 2;
+			
+			if (queue_points_count != 0){
+				// If we have something to draw.
+				
+				// Getting layer.
+				var current_layer = editor_layer_get(editor_selected_layer);
+				
+				// Start draw.
+				surface_set_target(current_layer.surface);
+	
+				// Tools.
+				switch(editor_selected_tool){
+					case eEDITOR_TOOL.ERASER:
+						// GPU Blendbmode.
+						gpu_set_blendmode(bm_subtract);
 					break;
 					case eEDITOR_TOOL.PENCIL:
-						// If pencil.
-
-						// Drawing.
-						draw_function(draw_x_previous, draw_y_previous, draw_x, draw_y);
-					break;
-					case eEDITOR_TOOL.RECTANGLE:
-						// If rectangle.
-						
-						// Just remember end position.
-						editor_rectangular_shape_end = [mouse_x, mouse_y];
+						// Drawing color.
+						draw_set_color(c_green);
 					break;
 				}
-
+								
+				var draw_function = function __draw_function(x1, y1, x2, y2){
+					// @description Draws.
+									
+					// Settings.
+					var curve = 0.1;
+					var threeshold = 2;
+					var radius = 8;
+									
+					// Get difference.
+					var difference = abs(x1 - x2) + abs(y1 - y2);
+									
+					if (difference >= radius / threeshold){
+						// If difference too much.
+										
+						// Recursion.
+						__draw_function(lerp(x1, x2, curve), lerp(y1, y2, curve), x2, y2);
+					}
+									
+					// Main element.
+					draw_circle(x1, y1, radius, false);
+				};
+				
+				for (var queue_point_index = queue_points_count - 1; queue_point_index >= 0; queue_point_index --){
+					// For all queue points.
+					
+					// Skip if we gonna break.
+					if (queue_point_index - 1 < 0) continue;
+					
+					// Getting layer draw positions.
+					// TODO: Add convert function.
+					var draw_x = (editor_mouse_queue_x[| queue_point_index] - editor_view_x) / editor_zoom;
+					var draw_y = (editor_mouse_queue_y[| queue_point_index] - editor_view_y) / editor_zoom;
+								
+					// Get previous.
+					var draw_x_previous = (editor_mouse_queue_x[| queue_point_index - 1] - editor_view_x) / editor_zoom;
+					var draw_y_previous = (editor_mouse_queue_y[| queue_point_index - 1] - editor_view_y) / editor_zoom;
+								
+					switch(editor_selected_tool){
+						// Selecting tool.
+					
+						case eEDITOR_TOOL.ERASER:
+							// If eraser.
+	
+							// Drawing.
+							draw_function(draw_x_previous, draw_y_previous, draw_x, draw_y);
+						break;
+						case eEDITOR_TOOL.PENCIL:
+							// If pencil.
+	
+							// Drawing.
+							draw_function(draw_x_previous, draw_y_previous, draw_x, draw_y);
+						break;
+					}
+	
+				}
+	
+				// End draw.
+				surface_reset_target();
+				
+				// GPU Blendbmode.
+				gpu_set_blendmode(bm_normal);
+				
+				// Clear queue.
+				ds_list_clear(editor_mouse_queue_x);
+				ds_list_clear(editor_mouse_queue_y);
+				window_mouse_queue_clear();
 			}
-
-			// End draw.
-			surface_reset_target();
-			
-			// GPU Blendbmode.
-			gpu_set_blendmode(bm_normal);
-			
-			// Clear queue.
-			ds_list_clear(editor_mouse_queue_x);
-			ds_list_clear(editor_mouse_queue_y);
-			window_mouse_queue_clear();
 		}
 	}
 }
@@ -962,6 +992,14 @@ function editor_close_event(){
 	};
 }
 
+function editor_selected_tool_is_rectangular(){
+	// @description Returns is selected tool is rectangular tool or not.
+	// @returns {bool} Is rectangular or not.
+	
+	// Returning.
+	return editor_selected_tool == eEDITOR_TOOL.RECTANGLE;
+}
+
 #endregion
 
 #endregion
@@ -974,7 +1012,7 @@ editor_mouse_queue_y = ds_list_create();
 
 // Rectangular shape position.
 // TODO: Add vector2 struct.
-editor_rectungular_shape_start = [-1, -1];
+editor_rectangular_shape_start = [-1, -1];
 editor_rectangular_shape_end = [-1, -1];
 
 // Editor width, height.
