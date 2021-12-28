@@ -294,8 +294,36 @@ function editor_draw(){
 	// Drawing layers.
 	editor_draw_layers();
 
+	// Rectangular tool preview.
+	editor_draw_rectangular_tool_preview();
+
 	// Drawing interface.
 	editor_draw_interface(0, 0);
+}
+
+function editor_draw_rectangular_tool_preview(){
+	// @description Draws preview for the rectangular tool.
+	
+	// Returning if not currently drawing any shape.
+	if (not editor_rectangular_shape) return;
+	
+	// Returning if not rectangular tool.
+	if (not editor_selected_tool_is_rectangular()) return;
+
+	// Tools.
+	switch(editor_selected_tool){
+		case eEDITOR_TOOL.RECTANGLE:
+			// Drawing color.
+			draw_set_color(c_red);
+		break;
+	}
+			
+	// Draw preview rectangle.
+	draw_rectangle((editor_rectangular_shape_start[0]), 
+				   (editor_rectangular_shape_start[1]), 
+				   (editor_rectangular_shape_end[0]), 
+				   (editor_rectangular_shape_end[1]), 
+				   false);
 }
 
 function editor_draw_layers(){
@@ -649,6 +677,16 @@ function editor_update_draw(){
 						   (editor_rectangular_shape_end[1] - editor_view_y) / editor_zoom, 
 						   false);
 						   
+			
+			// End shape.
+			editor_rectangular_shape = false;
+
+			// Rectangular shape begin.
+			editor_rectangular_shape_start = [-1, -1];
+			
+			// Rectangular shape end.
+			editor_rectangular_shape_end = [-1, -1];
+				
 			// End draw.
 			surface_reset_target();
 		}
@@ -663,8 +701,12 @@ function editor_update_draw(){
 			if (mouse_check_button_pressed(mb_left)){
 				// If hold begin.
 				
+				// Begin shape.
+				editor_rectangular_shape = true;
+				
 				// Rectangular shape begin.
 				editor_rectangular_shape_start = [mouse_x, mouse_y];
+				
 				// Rectangular shape end.
 				editor_rectangular_shape_end = [mouse_x, mouse_y];
 			}
@@ -1012,6 +1054,7 @@ editor_mouse_queue_y = ds_list_create();
 
 // Rectangular shape position.
 // TODO: Add vector2 struct.
+editor_rectangular_shape = false;
 editor_rectangular_shape_start = [-1, -1];
 editor_rectangular_shape_end = [-1, -1];
 
