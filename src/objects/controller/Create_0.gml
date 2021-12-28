@@ -916,6 +916,27 @@ function editor_project_save(){
 
 #endregion
 
+#region Other.
+
+function editor_close_event(){
+	// @description Handles close event, asking user that he wants save file or not.
+	
+	// Skip if project is already saved.
+	if (editor_project_is_saved) return;
+	
+	// Asking user.
+	var dialog = show_question("Project is not saved, do you want to save it right now?");
+	
+	if (dialog){
+		// If user preferred to save project.
+		
+		// Save project.
+		editor_project_save();
+	};
+}
+
+#endregion
+
 #endregion
 
 #region Entry point.
