@@ -974,7 +974,7 @@ function editor_project_update_window_title(){
 	
 	
 	// Update title.
-	window_set_caption(game_project_name + " " + save_state + project);
+	window_set_caption(string_replace(game_project_name, "_", " ") + " " + save_state + project);
 }
 
 function editor_project_save(){
