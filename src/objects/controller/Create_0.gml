@@ -1111,7 +1111,6 @@ editor_mouse_queue_x = ds_list_create();
 editor_mouse_queue_y = ds_list_create();
 
 // Rectangular shape position.
-// TODO: Add vector2 struct.
 editor_rectangular_shape = false;
 editor_rectangular_shape_start = POINT_NULL;
 editor_rectangular_shape_end = POINT_NULL;
