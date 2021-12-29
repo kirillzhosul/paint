@@ -641,8 +641,8 @@ function editor_update_draw_begin(){
 	// @description Updates draw begin (Mouse pressed).
 	
 	// Getting layer draw positions.
-	var draw_x = editor_project_x(mouse_x);
-	var draw_y = editor_project_y(mouse_y);
+	var draw_x = editor_project_x(mouse_x, false);
+	var draw_y = editor_project_y(mouse_y, false);
 
 	if editor_position_is_valid(draw_x, draw_y){
 		// If valid.
@@ -659,8 +659,10 @@ function editor_update_draw_begin(){
 	editor_clear_mouse_queue();
 			
 	// Add click point.
-	ds_list_add(editor_mouse_queue_x, mouse_x, mouse_x);
-	ds_list_add(editor_mouse_queue_y, mouse_y, mouse_y);
+	var window_mouse_x = window_mouse_get_x();
+	var window_mouse_y = window_mouse_get_y();
+	ds_list_add(editor_mouse_queue_x, window_mouse_x, window_mouse_x);
+	ds_list_add(editor_mouse_queue_y, window_mouse_y, window_mouse_y);
 		
 	// Mark project as unsaved.
 	editor_project_is_saved = false;
@@ -693,10 +695,10 @@ function editor_update_draw_end(){
 		var draw_function = EDITOR_TOOLS_DRAW_FUNCTIONS[? editor_selected_tool];
 
 		// Draw final shape.
-		draw_function(editor_project_x(editor_rectangular_shape_start.x), 
-						editor_project_y(editor_rectangular_shape_start.y), 
-						editor_project_x(editor_rectangular_shape_end.x), 
-						editor_project_y(editor_rectangular_shape_end.y), 
+		draw_function(editor_project_x(editor_rectangular_shape_start.x, false), 
+						editor_project_y(editor_rectangular_shape_start.y, false), 
+						editor_project_x(editor_rectangular_shape_end.x, false), 
+						editor_project_y(editor_rectangular_shape_end.y, false), 
 						false);
 						   
 			
@@ -772,12 +774,12 @@ function __editor_update_draw(){
 			if (queue_point_index - 1 < 0) continue;
 					
 			// Getting layer draw positions.
-			var draw_x = editor_project_x(editor_mouse_queue_x[| queue_point_index]);
-			var draw_y = editor_project_y(editor_mouse_queue_y[| queue_point_index]);
+			var draw_x = editor_project_x(editor_mouse_queue_x[| queue_point_index], true);
+			var draw_y = editor_project_y(editor_mouse_queue_y[| queue_point_index], true);
 								
 			// Get previous.
-			var draw_x_previous = editor_project_x(editor_mouse_queue_x[| queue_point_index - 1]);
-			var draw_y_previous = editor_project_y(editor_mouse_queue_y[| queue_point_index - 1]);
+			var draw_x_previous = editor_project_x(editor_mouse_queue_x[| queue_point_index - 1], true);
+			var draw_y_previous = editor_project_y(editor_mouse_queue_y[| queue_point_index - 1], true);
 								
 			switch(editor_selected_tool){
 				// Selecting tool.
@@ -1034,21 +1036,25 @@ function editor_project_save(){
 
 #region Other.
 
-function editor_project_x(window_x){
+function editor_project_x(window_x, window_apply_scale){
 	// @description Projects given x to editor surface x. 
 	// @param {real} window_x X from mouse_x or queue.
+	// @param {real} window_apply_scale If true, applies window scale for the point.
 	// @returns {real} Projected x.
 	
 	// Returning projected point.
+	if (window_apply_scale) window_x *= (room_width / window_get_width());
 	return (window_x - editor_view_x) / editor_zoom;
 }
 
-function editor_project_y(window_y){
+function editor_project_y(window_y, window_apply_scale){
 	// @description Projects given y to editor surface y. 
 	// @param {real} window_y Y from mouse_y or queue.
+	// @param {real} window_apply_scale If true, applies window scale for the point.
 	// @returns {real} Projected y.
 	
 	// Returning projected point.
+	if (window_apply_scale) window_y *= (room_height / window_get_height());
 	return (window_y - editor_view_y) / editor_zoom;
 }
 
