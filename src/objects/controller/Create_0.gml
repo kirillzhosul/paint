@@ -379,10 +379,10 @@ function editor_draw_rectangular_tool_preview(){
 	draw_set_color(EDITOR_DRAW_COLOR);
 			
 	// Get position.
-	var x1 = clamp(editor_rectangular_shape_start.x, editor_view_x, (editor_view_x + editor_width));
-	var y1 = clamp(editor_rectangular_shape_start.y, editor_view_y, (editor_view_y + editor_height));
-	var x2 = clamp(editor_rectangular_shape_end.x, editor_view_x - 1, (editor_view_x + editor_width - 1));
-	var y2 = clamp(editor_rectangular_shape_end.y, editor_view_y - 1, (editor_view_y + editor_height - 1));
+	var x1 = clamp(editor_rectangular_shape_start.x, editor_view_x, editor_view_x + editor_width * editor_zoom);
+	var y1 = clamp(editor_rectangular_shape_start.y, editor_view_y, editor_view_y + editor_height * editor_zoom);
+	var x2 = clamp(editor_rectangular_shape_end.x, editor_view_x - 1, editor_view_x + editor_width * editor_zoom - 1);
+	var y2 = clamp(editor_rectangular_shape_end.y, editor_view_y - 1, editor_view_y + editor_height * editor_zoom - 1);
 	
 	// Draw shape function.
 	var draw_function = EDITOR_TOOLS_DRAW_FUNCTIONS[? editor_selected_tool];
