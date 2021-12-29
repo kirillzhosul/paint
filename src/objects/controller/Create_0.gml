@@ -98,14 +98,27 @@ function sEditorStackCommand(layer_index, layer_surface) constructor{
 
 #endregion
 
-#region Macros, enums.
+#region Settings.
 
 // Editor tools.
 enum eEDITOR_TOOL{
 	PENCIL,
 	ERASER,
-	RECTANGLE
+	RECTANGLE,
+	ELLIPSE
 }
+
+// Draw functions for the tools.
+EDITOR_TOOLS_DRAW_FUNCTIONS = ds_map_create();
+EDITOR_TOOLS_DRAW_FUNCTIONS[? eEDITOR_TOOL.PENCIL]    = draw_rectangle;
+EDITOR_TOOLS_DRAW_FUNCTIONS[? eEDITOR_TOOL.ERASER]    = draw_rectangle;
+EDITOR_TOOLS_DRAW_FUNCTIONS[? eEDITOR_TOOL.RECTANGLE] = draw_rectangle;
+EDITOR_TOOLS_DRAW_FUNCTIONS[? eEDITOR_TOOL.ELLIPSE]   = draw_ellipse;
+
+// All rectangular tools.
+EDITOR_TOOLS_RECTANGULAR = ds_map_create();
+EDITOR_TOOLS_RECTANGULAR[? eEDITOR_TOOL.RECTANGLE] = true;
+EDITOR_TOOLS_RECTANGULAR[? eEDITOR_TOOL.ELLIPSE]   = true;
 
 #endregion
 
@@ -310,26 +323,34 @@ function editor_draw_rectangular_tool_preview(){
 	// Returning if not rectangular tool.
 	if (not editor_selected_tool_is_rectangular()) return;
 
-	// Tools.
-	switch(editor_selected_tool){
-		case eEDITOR_TOOL.RECTANGLE:
-			// Drawing color.
-			draw_set_color(c_red);
-		break;
-	}
+	// Drawing color.
+	draw_set_color(c_red);
 			
 	// Get position.
 	var x1 = editor_rectangular_shape_start[0];
 	var y1 = editor_rectangular_shape_start[1];
 	var x2 = editor_rectangular_shape_end[0];
 	var y2 = editor_rectangular_shape_end[1];
-	x2 = clamp(x2, editor_view_x - 1, editor_view_x + editor_width - 1);
-	y2 = clamp(y2, editor_view_y - 1, editor_view_y + editor_heigth - 1);
-	x1 = clamp(x1, editor_view_x, editor_view_x + editor_width);
-	y1 = clamp(y1, editor_view_y, editor_view_y + editor_heigth);
+	x2 = clamp(x2, editor_view_x - 1, (editor_view_x + editor_width - 1));
+	y2 = clamp(y2, editor_view_y - 1, (editor_view_y + editor_heigth - 1));
+	x1 = clamp(x1, editor_view_x, (editor_view_x + editor_width));
+	y1 = clamp(y1, editor_view_y, (editor_view_y + editor_heigth));
 	
-	// Draw preview rectangle.
-	draw_rectangle(x1, y1, x2, y2,false);
+	// Draw preview.
+	var draw_function = undefined;
+	switch(editor_selected_tool){
+		case eEDITOR_TOOL.RECTANGLE:
+			// Drawing rectangle.
+			draw_function = draw_rectangle;
+		break;
+		case eEDITOR_TOOL.ELLIPSE:
+			// Drawing ellipse.
+			draw_function = draw_ellipse;
+		break;
+	}
+	
+	// Call
+	draw_function(x1, y1, x2, y2, false);
 }
 
 function editor_draw_layers(){
@@ -412,6 +433,7 @@ function editor_draw_interface(x, y){
 	if (draw_button_sprite(x, y, ui_button_layer_tool_rectangle)){
 		// Current selected tool.
 		editor_selected_tool = eEDITOR_TOOL.RECTANGLE;
+		editor_selected_tool = eEDITOR_TOOL.ELLIPSE;
 	}
 	
 	// Drawing layers text.
@@ -662,13 +684,8 @@ function editor_update_draw(){
 		}else{
 			// If rectangular.
 		
-			// Tools.
-			switch(editor_selected_tool){
-				case eEDITOR_TOOL.RECTANGLE:
-					// Drawing color.
-					draw_set_color(c_red);
-				break;
-			}
+			// Drawing color.
+			draw_set_color(c_red);
 			
 			// Getting layer.
 			var current_layer = editor_layer_get(editor_selected_layer);
@@ -676,12 +693,25 @@ function editor_update_draw(){
 			// Start draw.
 			surface_set_target(current_layer.surface);
 
+			// Draw function.
+			var draw_function = undefined;
+			switch(editor_selected_tool){
+				case eEDITOR_TOOL.RECTANGLE:
+					// Drawing rectangle.
+					draw_function = draw_rectangle;
+				break;
+				case eEDITOR_TOOL.ELLIPSE:
+					// Drawing ellipse.
+					draw_function = draw_ellipse;
+				break;
+			}
+
 			// Draw final rectangle.
-			draw_rectangle((editor_rectangular_shape_start[0] - editor_view_x)  / editor_zoom, 
-						   (editor_rectangular_shape_start[1] - editor_view_y) / editor_zoom, 
-						   (editor_rectangular_shape_end[0] - editor_view_x) / editor_zoom, 
-						   (editor_rectangular_shape_end[1] - editor_view_y) / editor_zoom, 
-						   false);
+			draw_function((editor_rectangular_shape_start[0] - editor_view_x)  / editor_zoom, 
+						  (editor_rectangular_shape_start[1] - editor_view_y) / editor_zoom, 
+						  (editor_rectangular_shape_end[0] - editor_view_x) / editor_zoom, 
+						  (editor_rectangular_shape_end[1] - editor_view_y) / editor_zoom, 
+						  false);
 						   
 			
 			// End shape.
@@ -1045,7 +1075,7 @@ function editor_selected_tool_is_rectangular(){
 	// @returns {bool} Is rectangular or not.
 	
 	// Returning.
-	return editor_selected_tool == eEDITOR_TOOL.RECTANGLE;
+	return ds_map_exists(EDITOR_TOOLS_RECTANGULAR, editor_selected_tool);
 }
 
 #endregion
