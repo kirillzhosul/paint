@@ -460,6 +460,10 @@ function editor_draw_interface(){
 	draw_x += sprite_get_width(ui_button_layer_tool_eraser) + offset;
 	if (draw_button_sprite(draw_x, draw_y, ui_button_layer_tool_rectangle)) editor_selected_tool = eEDITOR_TOOL.RECTANGLE;
 	
+	// Ellipse tool.
+	draw_x += sprite_get_width(ui_button_layer_tool_rectangle) + offset;
+	if (draw_button_sprite(draw_x, draw_y, ui_button_layer_tool_ellipse)) editor_selected_tool = eEDITOR_TOOL.ELLIPSE;	
+	
 	// Drawing layers text.
 	draw_text(offset, sprite_get_height(ui_button_layer_new) + offset, "Layers: ");
 	
