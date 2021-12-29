@@ -1,12 +1,14 @@
 {
   "resources": [
     {"id":{"name":"ui_interface_font","path":"fonts/ui_interface_font/ui_interface_font.yy",},"order":0,},
-    {"id":{"name":"ui_button_layer_tool_eraser","path":"sprites/ui_button_layer_tool_eraser/ui_button_layer_tool_eraser.yy",},"order":1,},
+    {"id":{"name":"ui_button_layer_tool_rectangle","path":"sprites/ui_button_layer_tool_rectangle/ui_button_layer_tool_rectangle.yy",},"order":1,},
     {"id":{"name":"window_mouse_queue","path":"extensions/window_mouse_queue/window_mouse_queue.yy",},"order":0,},
     {"id":{"name":"ui_button_layer_down","path":"sprites/ui_button_layer_down/ui_button_layer_down.yy",},"order":3,},
     {"id":{"name":"ui_button_layer_new","path":"sprites/ui_button_layer_new/ui_button_layer_new.yy",},"order":0,},
+    {"id":{"name":"ui_button_layer_tool_eraser","path":"sprites/ui_button_layer_tool_eraser/ui_button_layer_tool_eraser.yy",},"order":2,},
     {"id":{"name":"ui_button_layer_delete","path":"sprites/ui_button_layer_delete/ui_button_layer_delete.yy",},"order":1,},
     {"id":{"name":"controller","path":"objects/controller/controller.yy",},"order":1,},
+    {"id":{"name":"ui_button_layer_tool_ellipse","path":"sprites/ui_button_layer_tool_ellipse/ui_button_layer_tool_ellipse.yy",},"order":3,},
     {"id":{"name":"ui_button_layer_up","path":"sprites/ui_button_layer_up/ui_button_layer_up.yy",},"order":2,},
     {"id":{"name":"ui_button_layer_visibility","path":"sprites/ui_button_layer_visibility/ui_button_layer_visibility.yy",},"order":4,},
     {"id":{"name":"ui_button_layer_tool_pencil","path":"sprites/ui_button_layer_tool_pencil/ui_button_layer_tool_pencil.yy",},"order":0,},

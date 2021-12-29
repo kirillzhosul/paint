@@ -24,12 +24,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"280e7854-00cb-4032-b2c1-6696e793902a","path":"sprites/ui_button_layer_tool_eraser/ui_button_layer_tool_eraser.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"280e7854-00cb-4032-b2c1-6696e793902a","path":"sprites/ui_button_layer_tool_eraser/ui_button_layer_tool_eraser.yy",},"LayerId":{"name":"c17f2340-70a6-4ef8-a6ae-221ca217b355","path":"sprites/ui_button_layer_tool_eraser/ui_button_layer_tool_eraser.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"ui_button_layer_tool_eraser","path":"sprites/ui_button_layer_tool_eraser/ui_button_layer_tool_eraser.yy",},"resourceVersion":"1.0","name":"280e7854-00cb-4032-b2c1-6696e793902a","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"280e7854-00cb-4032-b2c1-6696e793902a","path":"sprites/ui_button_layer_tool_rectangle/ui_button_layer_tool_rectangle.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"280e7854-00cb-4032-b2c1-6696e793902a","path":"sprites/ui_button_layer_tool_rectangle/ui_button_layer_tool_rectangle.yy",},"LayerId":{"name":"c17f2340-70a6-4ef8-a6ae-221ca217b355","path":"sprites/ui_button_layer_tool_rectangle/ui_button_layer_tool_rectangle.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"ui_button_layer_tool_rectangle","path":"sprites/ui_button_layer_tool_rectangle/ui_button_layer_tool_rectangle.yy",},"resourceVersion":"1.0","name":"280e7854-00cb-4032-b2c1-6696e793902a","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
-    "spriteId": {"name":"ui_button_layer_tool_eraser","path":"sprites/ui_button_layer_tool_eraser/ui_button_layer_tool_eraser.yy",},
+    "spriteId": {"name":"ui_button_layer_tool_rectangle","path":"sprites/ui_button_layer_tool_rectangle/ui_button_layer_tool_rectangle.yy",},
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -41,7 +41,7 @@
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"abca3ae4-57ac-47b3-a19f-758cfc802b43","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"280e7854-00cb-4032-b2c1-6696e793902a","path":"sprites/ui_button_layer_tool_eraser/ui_button_layer_tool_eraser.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"b80d36be-7ec3-4b6d-9fcd-2bfd545e0bd5","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"280e7854-00cb-4032-b2c1-6696e793902a","path":"sprites/ui_button_layer_tool_rectangle/ui_button_layer_tool_rectangle.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
@@ -58,9 +58,9 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"ui_button_layer_tool_eraser","path":"sprites/ui_button_layer_tool_eraser/ui_button_layer_tool_eraser.yy",},
+    "parent": {"name":"ui_button_layer_tool_rectangle","path":"sprites/ui_button_layer_tool_rectangle/ui_button_layer_tool_rectangle.yy",},
     "resourceVersion": "1.3",
-    "name": "ui_button_layer_tool_eraser",
+    "name": "ui_button_layer_tool_rectangle",
     "tags": [],
     "resourceType": "GMSequence",
   },
@@ -73,7 +73,7 @@
     "path": "folders/Interface/Buttons/Tools.yy",
   },
   "resourceVersion": "1.0",
-  "name": "ui_button_layer_tool_eraser",
+  "name": "ui_button_layer_tool_rectangle",
   "tags": [],
   "resourceType": "GMSprite",
 }
