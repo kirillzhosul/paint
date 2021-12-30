@@ -674,17 +674,15 @@ function editor_update_draw_begin(){
 function editor_update_draw_end(){
 	// @description Updates draw end (Mouse released).
 		
-	if (not editor_selected_tool_is_rectangular()){
-		// If not rectangular tools.
-			
-		// Push command.
-		if (not is_undefined(editor_command_stack_temporary)){
-			array_push(editor_command_stack, editor_command_stack_temporary);
-			editor_command_stack_temporary = undefined;
-		}
-	}else{
-		// If rectangular.
-		
+	// Push command.
+	if (not is_undefined(editor_command_stack_temporary)){
+		array_push(editor_command_stack, editor_command_stack_temporary);
+		editor_command_stack_temporary = undefined;
+	}
+	
+	if (editor_selected_tool_is_rectangular()){
+		// If rectangular tools.
+
 		// Drawing color.
 		draw_set_color(EDITOR_DRAW_COLOR);
 
