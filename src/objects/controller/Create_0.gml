@@ -578,6 +578,9 @@ function editor_command_undo(){
 	// Get layer.
 	var current_layer = editor_layers[command.layer_index];
 	
+	// Block operation if surface not exists.
+	if (not surface_exists(command.layer_surface)) return;
+	
 	// Reset layer.
 	current_layer.reset(command.layer_surface);
 }
