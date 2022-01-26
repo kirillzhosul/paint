@@ -1,3 +1,6 @@
+# Paint Editor
+Simple paint editor with layers, tools, undo system and more written in GML.
+
 ## Features
 * Layers system (create, delete, move, hide/unhide)
 * Tools (simple (pencil, eraser), rectangular (rectangle, ellipse))
