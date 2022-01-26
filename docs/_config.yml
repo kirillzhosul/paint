@@ -1,1 +1,5 @@
 theme: jekyll-theme-cayman
+title: Paint Editor
+description: Simple paint editor with layers, tools, undo system and more written in GML.
+
+show_downloads: true
