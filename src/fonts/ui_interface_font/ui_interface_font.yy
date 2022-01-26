@@ -857,7 +857,7 @@
   "maintainGms1Font": false,
   "parent": {
     "name": "Fonts",
-    "path": "folders/Fonts.yy",
+    "path": "folders/Interface/Fonts.yy",
   },
   "resourceVersion": "1.0",
   "name": "ui_interface_font",

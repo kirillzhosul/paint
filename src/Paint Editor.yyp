@@ -33,8 +33,8 @@
   ],
   "Folders": [
     {"folderPath":"folders/Interface.yy","order":2,"resourceVersion":"1.0","name":"Interface","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Interface/Buttons.yy","order":1,"resourceVersion":"1.0","name":"Buttons","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Fonts.yy","order":3,"resourceVersion":"1.0","name":"Fonts","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Interface/Buttons.yy","order":0,"resourceVersion":"1.0","name":"Buttons","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Interface/Fonts.yy","order":1,"resourceVersion":"1.0","name":"Fonts","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Interface/Buttons/Layers.yy","order":0,"resourceVersion":"1.0","name":"Layers","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Interface/Buttons/Tools.yy","order":1,"resourceVersion":"1.0","name":"Tools","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Extensions.yy","order":4,"resourceVersion":"1.0","name":"Extensions","tags":[],"resourceType":"GMFolder",},
