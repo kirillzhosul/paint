@@ -4,7 +4,7 @@
   "option_windows_version": "1.0.0.0",
   "option_windows_company_info": "Kirill Zhosul (@kirillzhosul)",
   "option_windows_product_info": "Paint Editor",
-  "option_windows_copyright_info": "Kirill Zhosul (@kirillzhosul)",
+  "option_windows_copyright_info": "(c) 2021 Kirill Zhosul (@kirillzhosul)",
   "option_windows_description_info": "Paint Editor",
   "option_windows_display_cursor": true,
   "option_windows_icon": "${base_options_dir}/windows/icons/icon.ico",
