@@ -36,6 +36,8 @@ function sEditorLayer(name) constructor{
 		if (not surface_exists(self.surface)){
 			// If surface is not exists.
 			
+			controller.editor_show_error("Layer surface not found! Loaded layer surface from the buffer!");
+			
 			// Loading surface.
 			self.create_surface();
 			buffer_set_surface(self.buffer, self.surface, 0);
@@ -446,6 +448,18 @@ function editor_draw_interface(){
 	var text = "Undo Stack:\n" + string(array_length(editor_command_stack));
 	draw_text(room_width - string_width(text), 0, text);
 	
+	// Error message.
+	if (editor_last_error_message != ""){
+		// If any error.
+		
+		// Draw error.
+		var text = "There is error during processing last operation! ";
+		draw_set_color(c_red);
+		draw_text(room_width - string_width(editor_last_error_message), room_height - string_height(editor_last_error_message), editor_last_error_message);
+		draw_set_color(c_white)
+		draw_text(room_width - string_width(text), room_height - string_height(editor_last_error_message) - string_height(text), text);
+	}
+	
 	// Tools buttons.
 	
 	// Pencil tool.
@@ -571,7 +585,7 @@ function editor_command_undo(){
 	
 	// Disallow to undo when holding mouse.
 	if (mouse_check_button(mb_left)) return;
-	
+
 	// Get command.
 	var command = array_pop(editor_command_stack);
 	
@@ -579,7 +593,10 @@ function editor_command_undo(){
 	var current_layer = editor_layers[command.layer_index];
 	
 	// Block operation if surface not exists.
-	if (not surface_exists(command.layer_surface)) return;
+	if (not surface_exists(command.layer_surface)){
+		editor_show_error("Undo blocked as command stack surface not exists!");
+		return;
+	}
 	
 	// Reset layer.
 	current_layer.reset(command.layer_surface);
@@ -697,10 +714,10 @@ function editor_update_draw_end(){
 
 		// Draw final shape.
 		draw_function(editor_project_x(editor_rectangular_shape_start.x, false), 
-						editor_project_y(editor_rectangular_shape_start.y, false), 
-						editor_project_x(editor_rectangular_shape_end.x, false), 
-						editor_project_y(editor_rectangular_shape_end.y, false), 
-						false);
+					  editor_project_y(editor_rectangular_shape_start.y, false), 
+					  editor_project_x(editor_rectangular_shape_end.x, false), 
+					  editor_project_y(editor_rectangular_shape_end.y, false), 
+				      false);
 						   
 			
 		// End shape.
@@ -785,20 +802,16 @@ function __editor_update_draw(){
 			switch(editor_selected_tool){
 				// Selecting tool.
 					
-				case eEDITOR_TOOL.ERASER:
+				case eEDITOR_TOOL.ERASER: case eEDITOR_TOOL.PENCIL:
 					// If eraser.
-	
-					// Drawing.
-					__editor_update_draw_function(draw_x_previous, draw_y_previous, draw_x, draw_y);
-				break;
-				case eEDITOR_TOOL.PENCIL:
-					// If pencil.
 	
 					// Drawing.
 					__editor_update_draw_function(draw_x_previous, draw_y_previous, draw_x, draw_y);
 				break;
 				default:
 					// Should not be happened.
+					editor_show_error("Unknown tool selected!");
+					editor_selected_tool = eEDITOR_TOOL.PENCIL;
 				break;
 			}
 		}
@@ -916,7 +929,11 @@ function editor_project_open(){
 	var selected_filename = get_open_filename(EDITOR_EXPLORER_PROJECT_FILTER, "");
 	
 	// If not existing file.
-	if (not file_exists(selected_filename)) return;
+	if (not file_exists(selected_filename)){
+		// Error.
+		editor_show_error("Failed to open project! File not exists!");
+		return;
+	}
 	
 	// Project filename.
 	editor_project_filename = selected_filename;
@@ -975,7 +992,6 @@ function editor_project_update_window_title(){
 		project = "(Project " + editor_project_filename + ")";
 	}
 	
-	
 	// Update title.
 	window_set_caption(string_replace(game_project_name, "_", " ") + " " + save_state + project);
 }
@@ -1011,6 +1027,8 @@ function editor_project_save(){
 			// Loading surface.
 			current_layer.create_surface();
 			buffer_set_surface(current_layer.buffer, current_layer.surface, 0);
+			
+			editor_show_error("Not found one of the layers while saving!");
 		}
 		
 		// Drawing.
@@ -1031,6 +1049,14 @@ function editor_project_save(){
 	
 	// Update title.
 	editor_project_update_window_title();
+}
+
+function editor_show_error(error_message){
+	// @description Show error.
+	// @param {string} error_message Message to show.
+	
+	// Set error.
+	editor_last_error_message = error_message;
 }
 
 #endregion
@@ -1130,7 +1156,10 @@ editor_command_stack_temporary = undefined;
 // Current selected layer.
 editor_selected_layer = 0;
 
-// Edtir project filename.
+// Editor last error message.
+editor_last_error_message = "";
+
+// Editor project filename.
 editor_project_filename = undefined;
 
 // Is current project saved or not.
