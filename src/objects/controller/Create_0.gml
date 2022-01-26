@@ -353,22 +353,27 @@ function editor_draw_interface(){
 	}
 	
 	// Tools buttons.
-	
+	var tool_is_selected = false;
 	// Pencil tool.
 	draw_x = 0;
-	if (draw_button_sprite(draw_x, draw_y, ui_button_layer_tool_pencil)) editor_selected_tool = eEDITOR_TOOL.PENCIL;
+	tool_is_selected = (editor_selected_tool == eEDITOR_TOOL.PENCIL);
+	if (draw_button_sprite(draw_x, draw_y, ui_button_layer_tool_pencil, tool_is_selected)) editor_selected_tool = eEDITOR_TOOL.PENCIL;
 	
 	// Eraser tool.
 	draw_x = sprite_get_width(ui_button_layer_tool_pencil) + offset;
-	if (draw_button_sprite(draw_x, draw_y, ui_button_layer_tool_eraser)) editor_selected_tool = eEDITOR_TOOL.ERASER;
+	tool_is_selected = (editor_selected_tool == eEDITOR_TOOL.ERASER);
+	if (draw_button_sprite(draw_x, draw_y, ui_button_layer_tool_eraser, tool_is_selected)) editor_selected_tool = eEDITOR_TOOL.ERASER;
 
 	// Rectangle tool.
 	draw_x += sprite_get_width(ui_button_layer_tool_eraser) + offset;
-	if (draw_button_sprite(draw_x, draw_y, ui_button_layer_tool_rectangle)) editor_selected_tool = eEDITOR_TOOL.RECTANGLE;
+	tool_is_selected = (editor_selected_tool == eEDITOR_TOOL.RECTANGLE);
+	if (draw_button_sprite(draw_x, draw_y, ui_button_layer_tool_rectangle, tool_is_selected)) editor_selected_tool = eEDITOR_TOOL.RECTANGLE;
 	
 	// Ellipse tool.
 	draw_x += sprite_get_width(ui_button_layer_tool_rectangle) + offset;
-	if (draw_button_sprite(draw_x, draw_y, ui_button_layer_tool_ellipse)) editor_selected_tool = eEDITOR_TOOL.ELLIPSE;	
+	tool_is_selected = (editor_selected_tool == eEDITOR_TOOL.ELLIPSE);
+	if (draw_button_sprite(draw_x, draw_y, ui_button_layer_tool_ellipse, tool_is_selected)) editor_selected_tool = eEDITOR_TOOL.ELLIPSE;	
+
 	
 	// Drawing layers text.
 	draw_text(offset, sprite_get_height(ui_button_layer_new) + offset, "Layers: ");
@@ -400,14 +405,15 @@ function editor_draw_interface(){
 	}
 }
 
-function draw_button_sprite(x, y, sprite){
+function draw_button_sprite(x, y, sprite, subimg=-1){
 	/// @description Draws sprite and returns is pressed or not.
 	/// @param {real} x X position to draw on.
 	/// @param {real} y Y position to draw on.
 	/// @param {sprite} sprite Sprite to draw.
+	/// @param {real} subimg Sub image of the sprite.
 	/// @returns {bool} Is clicked or not.
 	
-	draw_sprite(sprite, image_index, x, y);
+	draw_sprite(sprite, subimg, x, y);
 	
 	if (point_in_rectangle(mouse_x, mouse_y, x, y, x + sprite_get_width(sprite), y + sprite_get_height(sprite))){
 		return mouse_check_button_pressed(mb_left);
