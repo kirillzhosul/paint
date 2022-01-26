@@ -1,5 +1,3 @@
 /// @description Close event.
-// @author Kirill Zhosul (@kirillzhosul)
-
-// Calling close event.
+/// @author (с) 2021 Kirill Zhosul (@kirillzhosul)
 editor_close_event();

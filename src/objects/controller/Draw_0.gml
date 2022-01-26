@@ -1,5 +1,3 @@
 /// @description Drawing.
-// @author Kirill Zhosul (@kirillzhosul)
-
-// Drawing editor.
+/// @author (с) 2021 Kirill Zhosul (@kirillzhosul)
 editor_draw();

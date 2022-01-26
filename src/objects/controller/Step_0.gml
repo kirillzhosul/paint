@@ -1,5 +1,3 @@
 /// @description Updating.
-// @author Kirill Zhosul (@kirillzhosul)
-
-// Updating.
+/// @author (с) 2021 Kirill Zhosul (@kirillzhosul)
 editor_update();
