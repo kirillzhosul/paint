@@ -343,12 +343,6 @@ function editor_draw_interface(){
 	offset = 3;
 	draw_y = room_height - sprite_get_width(ui_button_layer_tool_pencil) - 3;
 	
-	// Command Stack.
-	
-	// Drawing counter text.
-	var text = "Undo Stack:\n" + string(array_length(editor_command_stack));
-	draw_text(room_width - string_width(text), 0, text);
-	
 	// Error message.
 	if (editor_last_error_message != ""){
 		var text = "There is error during processing last operation! ";
