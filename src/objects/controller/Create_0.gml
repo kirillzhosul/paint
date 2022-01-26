@@ -683,6 +683,7 @@ function editor_project_new(){
 function editor_project_open(){
 	/// @description Opens project from file.
 	var selected_filename = get_open_filename(EDITOR_EXPLORER_PROJECT_FILTER, "");
+	if (selected_filename == "") return;
 	editor_project_filename = selected_filename;
 
 	if (not file_exists(selected_filename)){
@@ -726,6 +727,8 @@ function editor_project_save(){
 	
 	if (is_undefined(editor_project_filename)){
 		editor_project_filename = get_save_filename(EDITOR_EXPLORER_PROJECT_FILTER, "");
+		if (editor_project_filename == "") return;
+		
 		editor_project_update_window_title();
 	}
 	
@@ -802,6 +805,8 @@ function editor_close_event(){
 	if (dialog){
 		editor_project_save();
 	};
+	
+	// Game stopped and closed here.
 }
 
 function editor_selected_tool_is_rectangular(){
